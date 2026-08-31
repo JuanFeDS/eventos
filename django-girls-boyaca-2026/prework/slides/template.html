@@ -551,7 +551,7 @@
     });
 
     function render() {
-      deck.style.transform = 'translateX(-' + (current * 100) + 'vw)';
+      deck.style.transform = 'translateX(-' + (current / slides.length * 100) + '%)';
       counterEl.textContent = (current + 1) + ' / ' + slides.length;
       Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
         dot.setAttribute('aria-current', i === current ? 'true' : 'false');
