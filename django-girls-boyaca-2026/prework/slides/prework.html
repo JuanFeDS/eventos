@@ -120,6 +120,7 @@
     background: var(--paper);
     position: relative;
     overflow-y: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -246,8 +247,8 @@
     max-width: 62ch; font-family: var(--font-mono); font-size: clamp(14px, 1.4vw, 18px); line-height: 1.9;
   }
   .console .line { display: flex; gap: 10px; }
-  .console .prompt { color: var(--coral); }
-  .console .cmd { color: var(--paper); }
+  .console .prompt { color: var(--coral); flex: none; }
+  .console .cmd { color: var(--paper); min-width: 0; overflow-wrap: anywhere; }
   .console .out { color: var(--mint); padding-left: 24px; }
 
   /* ---------- callout ---------- */
@@ -285,6 +286,25 @@
     }
     .chrome-bottom::-webkit-scrollbar { display: none; }
     .dot { flex: none; }
+
+    /* tipografía: en mobile el componente vw de los clamp() es casi nulo,
+       así que todo colapsaba a su mínimo (calibrado para pantalla de proyección) */
+    .slide { padding: 56px 22px; }
+    .eyebrow { font-size: 12px; }
+    .slide--cover h1 { font-size: 34px; }
+    .slide--cover .sub { font-size: 16px; }
+    .route-item { font-size: 13px; }
+    .slide--divider .num { font-size: 64px; }
+    .slide--divider h2 { font-size: 30px; }
+    .slide--divider .sub { font-size: 15px; }
+    .slide--steps h2, .slide--checklist h2, .slide--terminal h2, .slide--closing h2 { font-size: 24px; }
+    .slide--steps .sub, .slide--terminal .sub, .slide--closing .sub { font-size: 15.5px; }
+    .step p { font-size: 16.5px; }
+    .checklist li { font-size: 16.5px; }
+    .console { font-size: 14.5px; }
+    .slide--callout h2 { font-size: 28px; }
+    .slide--callout .sub { font-size: 16px; }
+    .help-slot { font-size: 13.5px; }
   }
 </style>
 
