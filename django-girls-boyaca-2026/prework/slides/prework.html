@@ -1,0 +1,572 @@
+<title>Instalación Django Girls Boyacá</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --ink:    #221C2E;
+    --paper:  #FFF8F4;
+    --coral:  #FF6B7A;
+    --coral-ink: #7A1F2B;
+    --mint:   #1FAE7F;
+    --sand:   #F2E4DD;
+    --plum:   #3D2647;
+    --plum-2: #2C1A34;
+
+    --font-display: 'Baloo 2', ui-rounded, 'Segoe UI Rounded', system-ui, sans-serif;
+    --font-body: 'Karla', -apple-system, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--plum-2);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- chrome ---------- */
+
+  .app { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+  .chrome-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(14px, 2.4vh, 26px) clamp(20px, 4vw, 56px);
+    font-family: var(--font-body);
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 248, 244, 0.55);
+    z-index: 20;
+    pointer-events: none;
+  }
+  .chrome-top .counter { font-variant-numeric: tabular-nums; }
+
+  .chrome-bottom {
+    position: absolute;
+    bottom: clamp(14px, 2.6vh, 28px);
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    padding: 0 clamp(20px, 6vw, 90px);
+    flex-wrap: wrap;
+    max-width: 100vw;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 248, 244, 0.28);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot:hover { background: rgba(255, 248, 244, 0.55); }
+  .dot[aria-current="true"] { background: var(--coral); transform: scale(1.5); }
+  .dot[data-kind="divider"] { width: 7px; height: 7px; border-radius: 2px; }
+  .dot:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 248, 244, 0.08);
+    border: 1px solid rgba(255, 248, 244, 0.18);
+    color: var(--paper);
+    width: clamp(36px, 4vw, 46px);
+    height: clamp(36px, 4vw, 46px);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-arrow:hover { background: rgba(255, 248, 244, 0.18); border-color: rgba(255, 248, 244, 0.4); }
+  .nav-arrow:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+  .nav-arrow--prev { left: clamp(10px, 2vw, 28px); }
+  .nav-arrow--next { right: clamp(10px, 2vw, 28px); }
+
+  /* ---------- deck mechanics ---------- */
+
+  .deck { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1); }
+
+  .slide {
+    flex: 0 0 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 11vh, 120px) clamp(24px, 8vw, 140px);
+    background: var(--paper);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(11px, 1.15vw, 14px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--coral-ink);
+    margin: 0 0 clamp(10px, 1.6vh, 18px);
+  }
+
+  h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; color: var(--ink); }
+
+  /* ---------- cover ---------- */
+
+  .slide--cover { background: var(--paper); }
+  .slide--cover h1 { font-size: clamp(40px, 6.4vw, 84px); font-weight: 800; line-height: 1.02; }
+  .slide--cover h1 .accent { color: var(--coral); }
+  .slide--cover .sub {
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--plum);
+    margin: clamp(10px, 1.8vh, 20px) 0 clamp(36px, 6vh, 64px);
+    max-width: 46ch;
+  }
+  .route { display: flex; flex-wrap: wrap; gap: clamp(6px, 1vw, 10px); max-width: 62ch; }
+  .route-item {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--sand); border-radius: 999px;
+    padding: 7px 14px 7px 8px;
+    font-size: clamp(12px, 1.05vw, 14px); color: var(--plum); font-weight: 500;
+  }
+  .route-item .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--plum); color: var(--paper);
+    font-family: var(--font-display); font-weight: 700; font-size: 11px;
+  }
+
+  /* ---------- divider ---------- */
+
+  .slide--divider { background: var(--plum); align-items: flex-start; }
+  .slide--divider .num {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(80px, 13vw, 180px);
+    color: rgba(255, 107, 122, 0.9);
+    line-height: 1;
+    margin: 0 0 clamp(6px, 1.2vh, 14px);
+  }
+  .slide--divider h2 { color: var(--paper); font-size: clamp(32px, 4.8vw, 60px); font-weight: 700; }
+  .slide--divider .sub { color: rgba(255, 248, 244, 0.6); font-size: clamp(14px, 1.4vw, 18px); margin-top: clamp(10px, 1.6vh, 16px); }
+
+  /* ---------- steps ---------- */
+
+  .slide--steps { justify-content: flex-start; padding-top: clamp(90px, 14vh, 150px); }
+  .slide--steps h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; }
+  .slide--steps .sub {
+    color: var(--plum);
+    font-size: clamp(14px, 1.4vw, 18px);
+    max-width: 62ch;
+    margin: clamp(8px, 1.4vh, 14px) 0 clamp(24px, 3.6vh, 40px);
+  }
+  .slide--steps h2 + .steps-layout { margin-top: clamp(28px, 4.5vh, 48px); }
+
+  .steps-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); gap: clamp(32px, 5vw, 64px); align-items: start; flex: 1; }
+  .steps-list { display: flex; flex-direction: column; gap: clamp(16px, 2.6vh, 26px); }
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step-num {
+    flex: none; width: clamp(28px, 2.6vw, 34px); height: clamp(28px, 2.6vw, 34px);
+    border-radius: 50%; background: var(--coral); color: var(--paper);
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(13px, 1.3vw, 16px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step p { margin: 0; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.5; padding-top: 2px; }
+  .step code { font-family: var(--font-mono); background: var(--sand); padding: 1px 7px; border-radius: 5px; font-size: 0.85em; }
+
+  .screenshot-slot {
+    border: 1.5px dashed rgba(61, 38, 71, 0.35);
+    border-radius: 14px;
+    background: var(--sand);
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    color: rgba(61, 38, 71, 0.55);
+    font-size: clamp(12px, 1.1vw, 14px);
+    padding: 20px;
+  }
+
+  /* ---------- checklist ---------- */
+
+  .slide--checklist h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(28px, 4.5vh, 48px); }
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 20px); max-width: 56ch; }
+  .checklist li { display: flex; align-items: center; gap: 14px; font-size: clamp(16px, 1.7vw, 21px); }
+  .box {
+    flex: none; width: 26px; height: 26px; border-radius: 7px; border: 2px solid var(--plum);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--paper);
+  }
+  .checklist li[data-done="true"] .box { background: var(--mint); border-color: var(--mint); }
+  .checklist li[data-done="false"] .box { background: transparent; }
+  .checklist li code { font-family: var(--font-mono); background: var(--sand); padding: 1px 7px; border-radius: 5px; font-size: 0.85em; }
+
+  /* ---------- terminal ---------- */
+
+  .slide--terminal { background: var(--plum-2); }
+  .slide--terminal h2 { color: var(--paper); font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(10px, 1.6vh, 16px); }
+  .slide--terminal .sub { color: rgba(255, 248, 244, 0.6); font-size: clamp(14px, 1.4vw, 18px); margin-bottom: clamp(28px, 4.5vh, 46px); max-width: 60ch; }
+  .console {
+    background: var(--plum); border-radius: 14px;
+    padding: clamp(20px, 3vh, 30px) clamp(22px, 3vw, 34px);
+    max-width: 62ch; font-family: var(--font-mono); font-size: clamp(14px, 1.4vw, 18px); line-height: 1.9;
+  }
+  .console .line { display: flex; gap: 10px; }
+  .console .prompt { color: var(--coral); }
+  .console .cmd { color: var(--paper); }
+  .console .out { color: var(--mint); padding-left: 24px; }
+
+  /* ---------- callout ---------- */
+
+  .slide--callout { background: var(--coral); align-items: center; text-align: center; }
+  .slide--callout .eyebrow { color: rgba(61, 38, 71, 0.7); }
+  .slide--callout h2 { color: var(--plum-2); font-size: clamp(34px, 5.2vw, 66px); font-weight: 800; max-width: 20ch; }
+  .slide--callout .sub { color: rgba(61, 38, 71, 0.8); font-size: clamp(15px, 1.6vw, 20px); max-width: 46ch; margin-top: clamp(14px, 2vh, 20px); }
+  .slide--callout code { font-family: var(--font-mono); background: rgba(61, 38, 71, 0.12); padding: 1px 7px; border-radius: 5px; }
+
+  /* ---------- closing / message ---------- */
+
+  .slide--closing h2 { font-size: clamp(28px, 3.8vw, 48px); font-weight: 700; margin-bottom: clamp(14px, 2vh, 20px); }
+  .slide--closing .sub { font-size: clamp(15px, 1.6vw, 19px); color: var(--plum); max-width: 54ch; margin-bottom: clamp(26px, 4vh, 38px); }
+  .help-slot {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--sand); border-radius: 12px; padding: 14px 20px;
+    font-family: var(--font-mono); font-size: clamp(13px, 1.2vw, 15px); color: var(--coral-ink);
+    width: fit-content;
+  }
+  .footnote { margin-top: clamp(30px, 5vh, 48px); font-size: clamp(12px, 1.1vw, 14px); color: rgba(34, 28, 46, 0.55); max-width: 48ch; }
+
+  @media (max-width: 720px) {
+    .steps-layout { grid-template-columns: 1fr; }
+    .screenshot-slot { aspect-ratio: 16 / 9; }
+  }
+</style>
+
+<div class="app">
+  <div class="chrome-top">
+    <span>Django Girls Boyacá · Prework</span>
+    <span class="counter" id="counter">1 / 26</span>
+  </div>
+
+  <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <button class="nav-arrow nav-arrow--next" id="nextBtn" aria-label="Slide siguiente">›</button>
+
+  <div class="deck" id="deck">
+
+    <!-- 1 · COVER -->
+    <section class="slide slide--cover" data-label="Portada" data-kind="cover">
+      <h1>Instala todo<br><span class="accent">antes del taller.</span></h1>
+      <p class="sub">Django Girls Boyacá 2026 · 11 de septiembre. Este prework te deja lista para llegar y programar directo, sin perder tiempo instalando.</p>
+      <div class="route">
+        <span class="route-item"><span class="n">1</span>Bienvenida</span>
+        <span class="route-item"><span class="n">2</span>Qué traer</span>
+        <span class="route-item"><span class="n">3</span>Terminal</span>
+        <span class="route-item"><span class="n">4</span>Python</span>
+        <span class="route-item"><span class="n">5</span>Editor</span>
+        <span class="route-item"><span class="n">6</span>GitHub</span>
+        <span class="route-item"><span class="n">7</span>Git</span>
+        <span class="route-item"><span class="n">8</span>Checklist</span>
+        <span class="route-item"><span class="n">9</span>Ayuda</span>
+      </div>
+    </section>
+
+    <!-- TEMA 1 · Bienvenida -->
+    <section class="slide slide--divider" data-label="Tema 1 · Bienvenida" data-kind="divider">
+      <div class="num">01</div>
+      <h2>Bienvenida y expectativas</h2>
+      <p class="sub">Antes de instalar nada, esto es lo que importa</p>
+    </section>
+
+    <section class="slide slide--closing" data-label="¿Qué es Django Girls?">
+      <p class="eyebrow">¿Qué es Django Girls?</p>
+      <h2>Vas a escribir tu primer código.</h2>
+      <p class="sub">Django Girls es un taller pensado para quienes nunca programaron. Al final del día vas a tener un blog propio, funcionando en internet, hecho por ti.</p>
+    </section>
+
+    <section class="slide slide--callout" data-label="No es aprender a programar en un día">
+      <p class="eyebrow">Importante</p>
+      <h2>El objetivo no es aprender a programar en un día.</h2>
+      <p class="sub">Es perderle el miedo al código y pasarla bien. Si algo no instala a la primera, es normal — para eso está este prework y el canal de ayuda (tema 9).</p>
+    </section>
+
+    <!-- TEMA 2 · Qué traer -->
+    <section class="slide slide--divider" data-label="Tema 2 · Qué traer" data-kind="divider">
+      <div class="num">02</div>
+      <h2>Qué traer al taller</h2>
+      <p class="sub">Tres cosas, nada más</p>
+    </section>
+
+    <section class="slide slide--checklist" data-label="Qué traer">
+      <p class="eyebrow">Antes de salir de casa</p>
+      <h2>Qué traer al taller</h2>
+      <ul class="checklist">
+        <li data-done="false"><span class="box"></span>Laptop propia, cargada</li>
+        <li data-done="false"><span class="box"></span>Cargador, por si acaso</li>
+        <li data-done="false"><span class="box"></span>Este prework a mano, por si algo falla</li>
+      </ul>
+    </section>
+
+    <!-- TEMA 3 · Línea de comandos -->
+    <section class="slide slide--divider" data-label="Tema 3 · Terminal" data-kind="divider">
+      <div class="num">03</div>
+      <h2>Línea de comandos</h2>
+      <p class="sub">Lo mínimo para movernos sin miedo</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="Abre la terminal">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Abre la terminal</h2>
+      <p class="sub">No es hackear: es solo darle instrucciones a la computadora, una por una.</p>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Busca <code>PowerShell</code> en el menú de inicio y ábrela.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Escribe <code>cd Desktop</code> y presiona Enter para moverte al escritorio.</p></li>
+          <li class="step"><span class="step-num">3</span><p>Escribe <code>mkdir django-girls</code> para crear una carpeta nueva.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(terminal abierta)</div>
+      </div>
+    </section>
+
+    <section class="slide slide--terminal" data-label="Así se ve en la práctica">
+      <p class="eyebrow" style="color: var(--coral);">Terminal</p>
+      <h2>Así se ve en la práctica</h2>
+      <p class="sub">Prueba estos comandos, uno por uno:</p>
+      <div class="console">
+        <div class="line"><span class="prompt">$</span><span class="cmd">cd Desktop</span></div>
+        <div class="line"><span class="prompt">$</span><span class="cmd">ls</span></div>
+        <div class="line out">Desktop  Documents  Downloads  Pictures</div>
+      </div>
+    </section>
+
+    <!-- TEMA 4 · Python -->
+    <section class="slide slide--divider" data-label="Tema 4 · Python" data-kind="divider">
+      <div class="num">04</div>
+      <h2>Instalación de Python</h2>
+      <p class="sub">Setup · lo vas a necesitar para todo lo demás</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="Instalación de Python">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Instalación de Python</h2>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Entra a <code>python.org/downloads</code> desde tu navegador.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Descarga la versión para Windows (el sitio la detecta sola).</p></li>
+          <li class="step"><span class="step-num">3</span><p>Abre el instalador y marca la casilla <code>Add Python to PATH</code> antes de instalar.</p></li>
+          <li class="step"><span class="step-num">4</span><p>Sigue el asistente hasta el final y ciérralo cuando termine.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(pantalla de instalación)</div>
+      </div>
+    </section>
+
+    <section class="slide slide--terminal" data-label="Verifica Python">
+      <p class="eyebrow" style="color: var(--coral);">Terminal</p>
+      <h2>Verifica que Python quedó instalado</h2>
+      <p class="sub">Abre la terminal y escribe esto:</p>
+      <div class="console">
+        <div class="line"><span class="prompt">$</span><span class="cmd">python --version</span></div>
+        <div class="line out">Python 3.12.4</div>
+      </div>
+    </section>
+
+    <section class="slide slide--terminal" data-label="Preparar PowerShell">
+      <p class="eyebrow" style="color: var(--coral);">Terminal</p>
+      <h2>Deja esto listo desde ya</h2>
+      <p class="sub">Windows bloquea por defecto los scripts de PowerShell (<code>.ps1</code>). Más adelante, en el taller, vas a necesitar correr uno para activar un entorno virtual de Python — mejor resolverlo ahora que a mitad del taller.</p>
+      <div class="console">
+        <div class="line"><span class="prompt">$</span><span class="cmd">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</span></div>
+        <div class="line out">Confirma con "S" si te lo pregunta</div>
+      </div>
+    </section>
+
+    <!-- TEMA 5 · Editor -->
+    <section class="slide slide--divider" data-label="Tema 5 · Editor" data-kind="divider">
+      <div class="num">05</div>
+      <h2>Editor de código</h2>
+      <p class="sub">Donde vas a escribir todo tu código</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="Instalación de VS Code">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Instalación de VS Code</h2>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Entra a <code>code.visualstudio.com</code>.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Descarga el instalador para Windows.</p></li>
+          <li class="step"><span class="step-num">3</span><p>Abre el instalador y deja las opciones por defecto.</p></li>
+          <li class="step"><span class="step-num">4</span><p>Abre VS Code y crea un archivo nuevo, para probar que funciona.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(VS Code abierto)</div>
+      </div>
+    </section>
+
+    <!-- TEMA 6 · GitHub -->
+    <section class="slide slide--divider" data-label="Tema 6 · GitHub" data-kind="divider">
+      <div class="num">06</div>
+      <h2>Cuenta de GitHub</h2>
+      <p class="sub">Tu usuario en la comunidad de código</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="Crea tu cuenta">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Crea tu cuenta</h2>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Entra a <code>github.com</code>.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Hacé clic en <code>Sign up</code>.</p></li>
+          <li class="step"><span class="step-num">3</span><p>Elige un nombre de usuario, tu email y una contraseña.</p></li>
+          <li class="step"><span class="step-num">4</span><p>Confirma tu cuenta desde el mail que te llega.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(formulario de registro)</div>
+      </div>
+    </section>
+
+    <section class="slide slide--callout" data-label="Todavía no vas a usar GitHub">
+      <p class="eyebrow">Importante</p>
+      <h2>Todavía no vas a usar GitHub.</h2>
+      <p class="sub">Hoy solo creamos la cuenta. Cómo usarla la vas a aprender en el taller.</p>
+    </section>
+
+    <!-- TEMA 7 · Git -->
+    <section class="slide slide--divider" data-label="Tema 7 · Git" data-kind="divider">
+      <div class="num">07</div>
+      <h2>Instalación de Git</h2>
+      <p class="sub">El programa, no la cuenta — son cosas distintas</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="Instalación de Git">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Instalación de Git</h2>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Entra a <code>git-scm.com/downloads</code>.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Descarga el instalador para Windows.</p></li>
+          <li class="step"><span class="step-num">3</span><p>Instala dejando todas las opciones por defecto.</p></li>
+          <li class="step"><span class="step-num">4</span><p>Configura tu nombre y email: <code>git config --global user.name "Tu Nombre"</code> y después <code>git config --global user.email "tu@email.com"</code>.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(instalador de Git)</div>
+      </div>
+    </section>
+
+    <section class="slide slide--terminal" data-label="Verifica Git">
+      <p class="eyebrow" style="color: var(--coral);">Terminal</p>
+      <h2>Verifica que Git quedó instalado</h2>
+      <p class="sub">Escribe esto en la terminal:</p>
+      <div class="console">
+        <div class="line"><span class="prompt">$</span><span class="cmd">git --version</span></div>
+        <div class="line out">git version 2.45.0</div>
+      </div>
+    </section>
+
+    <section class="slide slide--callout" data-label="Todavía no vas a usar Git">
+      <p class="eyebrow">Importante</p>
+      <h2>Todavía no vas a usar Git.</h2>
+      <p class="sub">Hoy solo lo instalamos y configuramos. Cómo usarlo lo vas a aprender paso a paso en el taller — nada de <code>git commit</code> por ahora.</p>
+    </section>
+
+    <!-- TEMA 8 · Checklist -->
+    <section class="slide slide--divider" data-label="Tema 8 · Checklist" data-kind="divider">
+      <div class="num">08</div>
+      <h2>Checklist final</h2>
+      <p class="sub">Si todo esto funciona, estás lista</p>
+    </section>
+
+    <section class="slide slide--checklist" data-label="Checklist final">
+      <p class="eyebrow">Verificación</p>
+      <h2>Antes de llegar al taller</h2>
+      <ul class="checklist">
+        <li data-done="false"><span class="box"></span>Terminal abre sin error</li>
+        <li data-done="false"><span class="box"></span><code>python --version</code> responde</li>
+        <li data-done="false"><span class="box"></span>PowerShell puede ejecutar scripts (<code>Set-ExecutionPolicy</code> ya configurado)</li>
+        <li data-done="false"><span class="box"></span>Editor de código abre</li>
+        <li data-done="false"><span class="box"></span>Cuenta de GitHub creada</li>
+        <li data-done="false"><span class="box"></span><code>git --version</code> responde</li>
+      </ul>
+    </section>
+
+    <!-- TEMA 9 · Ayuda -->
+    <section class="slide slide--divider" data-label="Tema 9 · Ayuda" data-kind="divider">
+      <div class="num">09</div>
+      <h2>¿Necesitas ayuda?</h2>
+      <p class="sub">Última parada antes del taller</p>
+    </section>
+
+    <section class="slide slide--closing" data-label="Canal de ayuda">
+      <p class="eyebrow">Ayuda</p>
+      <h2>¿Algo no instaló bien?</h2>
+      <p class="sub">Este prework no es un examen — es solo para que el día del taller arranques directo a programar. Escríbenos antes, no el mismo día a último momento.</p>
+      <div class="help-slot">canal de ayuda a definir · WhatsApp / Telegram</div>
+      <p class="footnote">Django Girls Boyacá 2026 — 11 de septiembre</p>
+    </section>
+
+  </div>
+
+  <div class="chrome-bottom" id="dots"></div>
+</div>
+
+<script>
+  (function () {
+    var deck = document.getElementById('deck');
+    var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+    var dotsEl = document.getElementById('dots');
+    var counterEl = document.getElementById('counter');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var current = 0;
+
+    slides.forEach(function (slide, i) {
+      var dot = document.createElement('button');
+      dot.className = 'dot';
+      if (slide.dataset.kind === 'divider') { dot.setAttribute('data-kind', 'divider'); }
+      dot.setAttribute('aria-label', (i + 1) + '. ' + (slide.dataset.label || 'Slide'));
+      dot.title = slide.dataset.label || '';
+      dot.addEventListener('click', function () { go(i); });
+      dotsEl.appendChild(dot);
+    });
+
+    function render() {
+      deck.style.transform = 'translateX(-' + (current * 100) + 'vw)';
+      counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+        dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+      });
+      prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+      nextBtn.style.visibility = current === slides.length - 1 ? 'hidden' : 'visible';
+    }
+
+    function go(i) {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      render();
+    }
+
+    prevBtn.addEventListener('click', function () { go(current - 1); });
+    nextBtn.addEventListener('click', function () { go(current + 1); });
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(current + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(current - 1); }
+      else if (e.key === 'Home') { go(0); }
+      else if (e.key === 'End') { go(slides.length - 1); }
+    });
+
+    render();
+  })();
+</script>

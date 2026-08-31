@@ -1,0 +1,578 @@
+<title>Prework Django Girls Boyacá</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --ink:    #221C2E;
+    --paper:  #FFF8F4;
+    --coral:  #FF6B7A;
+    --coral-ink: #7A1F2B;
+    --mint:   #1FAE7F;
+    --sand:   #F2E4DD;
+    --plum:   #3D2647;
+    --plum-2: #2C1A34;
+
+    --font-display: 'Baloo 2', ui-rounded, 'Segoe UI Rounded', system-ui, sans-serif;
+    --font-body: 'Karla', -apple-system, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--plum-2);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- chrome ---------- */
+
+  .app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chrome-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(14px, 2.4vh, 26px) clamp(20px, 4vw, 56px);
+    font-family: var(--font-body);
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 248, 244, 0.55);
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .chrome-top .counter { font-variant-numeric: tabular-nums; }
+
+  .chrome-bottom {
+    position: absolute;
+    bottom: clamp(14px, 2.6vh, 28px);
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 248, 244, 0.3);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot:hover { background: rgba(255, 248, 244, 0.55); }
+  .dot[aria-current="true"] {
+    background: var(--coral);
+    transform: scale(1.35);
+  }
+  .dot:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 248, 244, 0.08);
+    border: 1px solid rgba(255, 248, 244, 0.18);
+    color: var(--paper);
+    width: clamp(36px, 4vw, 46px);
+    height: clamp(36px, 4vw, 46px);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-arrow:hover { background: rgba(255, 248, 244, 0.18); border-color: rgba(255, 248, 244, 0.4); }
+  .nav-arrow:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+  .nav-arrow--prev { left: clamp(10px, 2vw, 28px); }
+  .nav-arrow--next { right: clamp(10px, 2vw, 28px); }
+
+  /* ---------- deck mechanics ---------- */
+
+  .deck {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .slide {
+    flex: 0 0 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 11vh, 120px) clamp(24px, 8vw, 140px);
+    background: var(--paper);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(11px, 1.15vw, 14px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--coral-ink);
+    margin: 0 0 clamp(10px, 1.6vh, 18px);
+  }
+
+  h1, h2 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  /* ---------- cover ---------- */
+
+  .slide--cover { background: var(--paper); }
+  .slide--cover h1 {
+    font-size: clamp(40px, 6.4vw, 84px);
+    font-weight: 800;
+    line-height: 1.02;
+  }
+  .slide--cover h1 .accent { color: var(--coral); }
+  .slide--cover .sub {
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--plum);
+    margin: clamp(10px, 1.8vh, 20px) 0 clamp(36px, 6vh, 64px);
+    max-width: 46ch;
+  }
+
+  .route {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1vw, 10px);
+    max-width: 62ch;
+  }
+  .route-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--sand);
+    border-radius: 999px;
+    padding: 7px 14px 7px 8px;
+    font-size: clamp(12px, 1.05vw, 14px);
+    color: var(--plum);
+    font-weight: 500;
+  }
+  .route-item .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--plum);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  /* ---------- divider ---------- */
+
+  .slide--divider {
+    background: var(--plum);
+    align-items: flex-start;
+  }
+  .slide--divider .num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(80px, 13vw, 180px);
+    color: rgba(255, 107, 122, 0.9);
+    line-height: 1;
+    margin: 0 0 clamp(6px, 1.2vh, 14px);
+  }
+  .slide--divider h2 {
+    color: var(--paper);
+    font-size: clamp(32px, 4.8vw, 60px);
+    font-weight: 700;
+  }
+  .slide--divider .sub {
+    color: rgba(255, 248, 244, 0.6);
+    font-size: clamp(14px, 1.4vw, 18px);
+    margin-top: clamp(10px, 1.6vh, 16px);
+  }
+
+  /* ---------- steps ---------- */
+
+  .slide--steps { justify-content: flex-start; padding-top: clamp(90px, 14vh, 150px); }
+  .slide--steps h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(28px, 4.5vh, 48px); }
+
+  .steps-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+    flex: 1;
+  }
+
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2.6vh, 26px);
+  }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex: none;
+    width: clamp(28px, 2.6vw, 34px);
+    height: clamp(28px, 2.6vw, 34px);
+    border-radius: 50%;
+    background: var(--coral);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(13px, 1.3vw, 16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step p {
+    margin: 0;
+    font-size: clamp(15px, 1.5vw, 19px);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+  .step code {
+    font-family: var(--font-mono);
+    background: var(--sand);
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-size: 0.85em;
+  }
+
+  .screenshot-slot {
+    border: 1.5px dashed rgba(61, 38, 71, 0.35);
+    border-radius: 14px;
+    background: var(--sand);
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(61, 38, 71, 0.55);
+    font-size: clamp(12px, 1.1vw, 14px);
+    padding: 20px;
+  }
+
+  /* ---------- checklist ---------- */
+
+  .slide--checklist h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(28px, 4.5vh, 48px); }
+
+  .checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2.2vh, 20px);
+    max-width: 56ch;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: clamp(16px, 1.7vw, 21px);
+  }
+  .checklist li .box { margin-top: 2px; }
+  .checklist li .label { flex: 1; min-width: 0; line-height: 1.4; }
+  .box {
+    flex: none;
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    border: 2px solid var(--plum);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--paper);
+  }
+  .checklist li[data-done="true"] .box { background: var(--mint); border-color: var(--mint); }
+  .checklist li[data-done="false"] .box { background: transparent; }
+  .checklist li[data-done="false"] { color: rgba(34, 28, 46, 0.55); }
+
+  /* ---------- terminal ---------- */
+
+  .slide--terminal { background: var(--plum-2); }
+  .slide--terminal h2 { color: var(--paper); font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(10px, 1.6vh, 16px); }
+  .slide--terminal .sub { color: rgba(255, 248, 244, 0.6); font-size: clamp(14px, 1.4vw, 18px); margin-bottom: clamp(28px, 4.5vh, 46px); max-width: 60ch; }
+
+  .console {
+    background: var(--plum);
+    border-radius: 14px;
+    padding: clamp(20px, 3vh, 30px) clamp(22px, 3vw, 34px);
+    max-width: 62ch;
+    font-family: var(--font-mono);
+    font-size: clamp(14px, 1.4vw, 18px);
+    line-height: 1.9;
+  }
+  .console .line { display: flex; gap: 10px; }
+  .console .prompt { color: var(--coral); }
+  .console .cmd { color: var(--paper); }
+  .console .out { color: var(--mint); padding-left: 24px; }
+
+  /* ---------- callout ---------- */
+
+  .slide--callout {
+    background: var(--coral);
+    align-items: center;
+    text-align: center;
+  }
+  .slide--callout .eyebrow { color: rgba(61, 38, 71, 0.7); }
+  .slide--callout h2 {
+    color: var(--plum-2);
+    font-size: clamp(34px, 5.2vw, 66px);
+    font-weight: 800;
+    max-width: 18ch;
+  }
+  .slide--callout .sub {
+    color: rgba(61, 38, 71, 0.8);
+    font-size: clamp(15px, 1.6vw, 20px);
+    max-width: 46ch;
+    margin-top: clamp(14px, 2vh, 20px);
+  }
+
+  /* ---------- closing ---------- */
+
+  .slide--closing h2 { font-size: clamp(28px, 3.8vw, 48px); font-weight: 700; margin-bottom: clamp(14px, 2vh, 20px); }
+  .slide--closing .sub { font-size: clamp(15px, 1.6vw, 19px); color: var(--plum); max-width: 52ch; margin-bottom: clamp(26px, 4vh, 38px); }
+  .help-slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--sand);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1.2vw, 15px);
+    color: var(--coral-ink);
+    width: fit-content;
+  }
+  .footnote {
+    margin-top: clamp(30px, 5vh, 48px);
+    font-size: clamp(12px, 1.1vw, 14px);
+    color: rgba(34, 28, 46, 0.55);
+    max-width: 48ch;
+  }
+
+  /* ---------- guide (meta) ---------- */
+
+  .slide--guide h2 { font-size: clamp(26px, 3.4vw, 40px); font-weight: 700; margin-bottom: clamp(24px, 4vh, 40px); }
+  .mold-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 22px);
+    max-width: 76ch;
+  }
+  .mold {
+    background: var(--sand);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .mold .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: var(--plum);
+    margin-bottom: 4px;
+  }
+  .mold code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--coral-ink);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .mold p { margin: 0; font-size: clamp(12.5px, 1.2vw, 14.5px); color: rgba(34, 28, 46, 0.75); line-height: 1.45; }
+
+  @media (max-width: 720px) {
+    .steps-layout { grid-template-columns: 1fr; }
+    .screenshot-slot { aspect-ratio: 16 / 9; }
+    .mold-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="app">
+  <div class="chrome-top">
+    <span>Django Girls Boyacá · Prework</span>
+    <span class="counter" id="counter">1 / 8</span>
+  </div>
+
+  <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <button class="nav-arrow nav-arrow--next" id="nextBtn" aria-label="Slide siguiente">›</button>
+
+  <div class="deck" id="deck">
+
+    <!-- 1 · COVER -->
+    <section class="slide slide--cover" data-label="Portada">
+      <h1>Instala todo<br><span class="accent">antes del taller.</span></h1>
+      <p class="sub">Django Girls Boyacá 2026 · 11 de septiembre. Este prework te deja lista para llegar y programar directo, sin perder tiempo instalando.</p>
+      <div class="route">
+        <span class="route-item"><span class="n">1</span>Bienvenida</span>
+        <span class="route-item"><span class="n">2</span>Qué traer</span>
+        <span class="route-item"><span class="n">3</span>Terminal</span>
+        <span class="route-item"><span class="n">4</span>Python</span>
+        <span class="route-item"><span class="n">5</span>Editor</span>
+        <span class="route-item"><span class="n">6</span>GitHub</span>
+        <span class="route-item"><span class="n">7</span>Git</span>
+        <span class="route-item"><span class="n">8</span>Checklist</span>
+        <span class="route-item"><span class="n">9</span>Ayuda</span>
+      </div>
+    </section>
+
+    <!-- 2 · DIVIDER -->
+    <section class="slide slide--divider" data-label="Divisor de tema">
+      <div class="num">04</div>
+      <h2>Instalación de Python</h2>
+      <p class="sub">Setup · lo vas a necesitar para todo lo demás</p>
+    </section>
+
+    <!-- 3 · STEPS -->
+    <section class="slide slide--steps" data-label="Paso a paso">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Instalación de Python</h2>
+      <div class="steps-layout">
+        <ol class="steps-list">
+          <li class="step"><span class="step-num">1</span><p>Entra a <code>python.org/downloads</code> desde tu navegador.</p></li>
+          <li class="step"><span class="step-num">2</span><p>Descarga la versión para tu sistema operativo (Windows, Mac o Linux).</p></li>
+          <li class="step"><span class="step-num">3</span><p>Abre el instalador. En Windows, marca la casilla <code>Add Python to PATH</code>.</p></li>
+          <li class="step"><span class="step-num">4</span><p>Sigue el asistente hasta el final y ciérralo cuando termine.</p></li>
+        </ol>
+        <div class="screenshot-slot">Captura pendiente<br>(pantalla de instalación)</div>
+      </div>
+    </section>
+
+    <!-- 4 · CHECKLIST -->
+    <section class="slide slide--checklist" data-label="Checklist">
+      <p class="eyebrow">Checklist</p>
+      <h2>Antes de llegar al taller</h2>
+      <ul class="checklist">
+        <li data-done="true"><span class="box">✓</span><span class="label">Terminal abre sin error</span></li>
+        <li data-done="true"><span class="box">✓</span><span class="label"><code style="font-family:var(--font-mono); background:var(--sand); padding:1px 7px; border-radius:5px; font-size:0.85em;">python --version</code> responde</span></li>
+        <li data-done="false"><span class="box"></span><span class="label">Editor de código abre</span></li>
+        <li data-done="false"><span class="box"></span><span class="label">Cuenta de GitHub creada</span></li>
+        <li data-done="false"><span class="box"></span><span class="label">git --version responde</span></li>
+      </ul>
+    </section>
+
+    <!-- 5 · TERMINAL -->
+    <section class="slide slide--terminal" data-label="Terminal / código">
+      <p class="eyebrow" style="color: var(--coral);">Terminal</p>
+      <h2>Verifica que Python quedó instalado</h2>
+      <p class="sub">Abre la terminal (PowerShell en Windows, Terminal en Mac) y escribe esto:</p>
+      <div class="console">
+        <div class="line"><span class="prompt">$</span><span class="cmd">python --version</span></div>
+        <div class="line out">Python 3.12.4</div>
+      </div>
+    </section>
+
+    <!-- 6 · CALLOUT -->
+    <section class="slide slide--callout" data-label="Callout / advertencia">
+      <p class="eyebrow">Importante</p>
+      <h2>Todavía no vas a usar Git.</h2>
+      <p class="sub">Hoy solo lo instalamos y configuramos. Cómo usarlo lo vas a aprender paso a paso en el taller — nada de <code style="font-family:var(--font-mono);">git commit</code> por ahora.</p>
+    </section>
+
+    <!-- 7 · CLOSING -->
+    <section class="slide slide--closing" data-label="Cierre / ayuda">
+      <p class="eyebrow">Ayuda</p>
+      <h2>¿Algo no instaló bien?</h2>
+      <p class="sub">Este prework no es un examen — es solo para que el día del taller arranques directo a programar. Escríbenos antes, no el mismo día a último momento.</p>
+      <div class="help-slot">canal de ayuda a definir · WhatsApp / Telegram</div>
+      <p class="footnote">Django Girls Boyacá 2026 — 11 de septiembre</p>
+    </section>
+
+    <!-- 8 · GUIDE (meta, referencia para armar el resto de los temas) -->
+    <section class="slide slide--guide" data-label="Guía de uso">
+      <p class="eyebrow">Guía de uso de esta plantilla</p>
+      <h2>6 moldes para los 9 temas</h2>
+      <div class="mold-grid">
+        <div class="mold"><div class="name">Divisor</div><code>.slide--divider</code><p>Abre cada uno de los 9 temas. Fondo plum, número grande, un título.</p></div>
+        <div class="mold"><div class="name">Paso a paso</div><code>.slide--steps</code><p>Instrucciones numeradas + espacio para captura de pantalla al costado.</p></div>
+        <div class="mold"><div class="name">Checklist</div><code>.slide--checklist</code><p>Lista de verificación con casillas — usar antes de cerrar un tema.</p></div>
+        <div class="mold"><div class="name">Terminal</div><code>.slide--terminal</code><p>Comandos y su salida esperada, para pasos de verificación técnica.</p></div>
+        <div class="mold"><div class="name">Callout</div><code>.slide--callout</code><p>Una sola frase importante a pantalla completa — usar con moderación.</p></div>
+        <div class="mold"><div class="name">Cierre</div><code>.slide--closing</code><p>Mensaje final del tema o del prework, con vía de contacto.</p></div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="chrome-bottom" id="dots"></div>
+</div>
+
+<script>
+  (function () {
+    var deck = document.getElementById('deck');
+    var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+    var dotsEl = document.getElementById('dots');
+    var counterEl = document.getElementById('counter');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var current = 0;
+
+    slides.forEach(function (slide, i) {
+      var dot = document.createElement('button');
+      dot.className = 'dot';
+      dot.setAttribute('aria-label', (i + 1) + '. ' + (slide.dataset.label || 'Slide'));
+      dot.addEventListener('click', function () { go(i); });
+      dotsEl.appendChild(dot);
+    });
+
+    function render() {
+      deck.style.transform = 'translateX(-' + (current * 100) + 'vw)';
+      counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+        dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+      });
+      prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+      nextBtn.style.visibility = current === slides.length - 1 ? 'hidden' : 'visible';
+    }
+
+    function go(i) {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      render();
+    }
+
+    prevBtn.addEventListener('click', function () { go(current - 1); });
+    nextBtn.addEventListener('click', function () { go(current + 1); });
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(current + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(current - 1); }
+      else if (e.key === 'Home') { go(0); }
+      else if (e.key === 'End') { go(slides.length - 1); }
+    });
+
+    render();
+  })();
+</script>
