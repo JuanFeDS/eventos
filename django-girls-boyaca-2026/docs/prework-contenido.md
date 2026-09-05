@@ -61,6 +61,6 @@ Borrador para revisión antes de pasar a slides. Objetivo del prework: que las a
 
 ## Pendientes para cerrar antes de pasar a slides
 - [ ] Definir canal de ayuda concreto (WhatsApp/Telegram/otro)
-- [ ] Confirmar si el prework es sesión en vivo o autoguiado (afecta tono y nivel de detalle)
-- [ ] Confirmar si el evento es virtual o presencial
+- [x] Confirmar si el prework es sesión en vivo o autoguiado — **en vivo**, martes 2026-09-08, 7:30pm, virtual
+- [x] Confirmar si el evento es virtual o presencial — **prework virtual, taller presencial** (viernes 2026-09-11)
 - [ ] Espacio en disco estimado a mencionar en sección 2
