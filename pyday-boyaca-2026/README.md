@@ -19,4 +19,15 @@ Si alguna vez has sentido que tu notebook dejó de ser suficiente, esta charla t
 
 ## Caso de estudio
 
-Spaceship Titanic (`Data_Science/06_Proyectos/ML_Projects/`) — narrativa de leakage/GroupKFold y evolución de notebook a pipeline modular, exp-034 (0.80944 Kaggle real). Mismo eje que la corrección pendiente del MDX del portafolio (M1, paso 4).
+Streamly — plataforma de streaming ficticia, dataset sintético de churn en formato panel mensual (una fila = cliente-mes, ~6 meses de historia por cliente). El eje de la charla es la evolución notebook → pipeline modular en 6 etapas (comparar modelos, feature engineering, experimentación, reproducibilidad, proyecto final); el leakage vía `customer_id` aparece solo como una mención breve, no como protagonista. Guion completo en `docs/guion.md`.
+
+Reemplaza a Spaceship Titanic (decisión 2026-09-05) — la corrección pendiente del MDX del portafolio queda como tarea aparte, sin conexión directa con esta charla.
+
+## Slides
+
+- `slides/template.html` — plantilla base con los 4 moldes de marca sacados de `slides/Diapositivas base para PyDay Boyacá.pdf` (portada, título de sección, contacto, cierre) + 6 moldes de contenido (declaración, callout, código, árbol de carpetas, lista, nota al margen). Sirve como referencia/catálogo de moldes.
+- `slides/charla.html` — las 16 slides reales de la charla completa, armadas a partir de `docs/guion.md` (gancho + 6 etapas + cierre) sobre esos moldes. Fondo plano (sin degradados) por preferencia de Juan; cada divisor de etapa y cada frase de cierre quedaron fusionados como eyebrow/subtítulo de la slide de contenido en vez de slides aparte.
+
+Mismo motor de navegación del prework de Django Girls (flechas, dots, swipe táctil, teclado). Assets reales (colibríes + franja de auspiciantes) en `slides/assets/`.
+
+Pendiente: el ícono de Python del logo original tiene marca de agua de Canva sin licenciar — el logo quedó reconstruido solo con texto hasta que se resuelva. El dato de contacto solo tiene el correo por ahora (a definir si se agregan GitHub/portafolio).
