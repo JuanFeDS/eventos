@@ -1,0 +1,764 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Más allá del notebook — PyDay Boyacá 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --olive-dark: #6B5D2E;
+    --olive:      #838C40;
+    --olive-deep: #6D6030;
+    --cream:      #F7F5E8;
+    --cream-soft: rgba(247, 245, 232, 0.65);
+    --footer-bg:  #F9FFE3;
+    --ink:        #2B2A1A;
+    --ink-soft:   rgba(43, 42, 26, 0.65);
+    --gold:       #E0A83A;
+    --gold-deep:  #A9781C;
+
+    --font-display: 'Baloo 2', ui-rounded, 'Segoe UI Rounded', system-ui, sans-serif;
+    --font-body: 'Quicksand', -apple-system, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--olive-deep);
+    color: var(--cream);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- chrome ---------- */
+
+  .app { position: relative; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
+
+  .chrome-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(14px, 2.4vh, 26px) clamp(20px, 4vw, 56px);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247, 245, 232, 0.55);
+    z-index: 20;
+    pointer-events: none;
+    mix-blend-mode: difference;
+  }
+  .chrome-top .counter { font-variant-numeric: tabular-nums; }
+
+  .chrome-bottom {
+    position: absolute;
+    bottom: clamp(14px, 2.6vh, 28px);
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    padding: 0 clamp(20px, 6vw, 90px);
+    flex-wrap: wrap;
+    max-width: 100vw;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot:hover { background: rgba(255, 255, 255, 0.65); }
+  .dot[aria-current="true"] { background: var(--gold); transform: scale(1.5); }
+  .dot:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--cream);
+    width: clamp(36px, 4vw, 46px);
+    height: clamp(36px, 4vw, 46px);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-arrow:hover { background: rgba(255, 255, 255, 0.22); border-color: rgba(255, 255, 255, 0.45); }
+  .nav-arrow:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .nav-arrow--prev { left: clamp(10px, 2vw, 28px); }
+  .nav-arrow--next { right: clamp(10px, 2vw, 28px); }
+
+  /* ---------- deck mechanics ---------- */
+
+  .deck { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1); touch-action: pan-y; }
+
+  .slide {
+    flex: 0 0 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 11vh, 120px) clamp(24px, 8vw, 140px);
+    background: var(--olive);
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    margin: 0;
+    color: var(--cream);
+  }
+
+  /* ---------- decorative chrome shared across molds ---------- */
+
+  .brand-mark {
+    position: absolute;
+    top: clamp(24px, 4vh, 44px);
+    left: clamp(24px, 6vw, 64px);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--font-display);
+    color: var(--cream);
+    z-index: 5;
+  }
+  .brand-mark .py { font-weight: 800; font-size: clamp(18px, 2vw, 24px); }
+  .brand-mark .place { font-weight: 700; font-size: clamp(10px, 1vw, 12px); color: var(--cream-soft); align-self: center; }
+
+  .dots-strip {
+    position: absolute;
+    left: 0;
+    bottom: clamp(18px, 3vh, 34px);
+    width: min(64%, 720px);
+    height: 22px;
+    background-image: radial-gradient(circle, rgba(247, 245, 232, 0.55) 1.6px, transparent 1.8px);
+    background-size: 15px 15px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .bird {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 3;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.25));
+  }
+  .bird--perched { height: clamp(220px, 42vh, 460px); }
+  .bird--looking { height: clamp(180px, 32vh, 340px); }
+  .bird--flying  { height: clamp(180px, 34vh, 360px); right: clamp(24px, 6vw, 90px); bottom: auto; top: clamp(40px, 8vh, 90px); }
+
+  .sparkle {
+    position: absolute;
+    color: var(--cream);
+    font-size: clamp(14px, 1.6vw, 22px);
+    opacity: 0.85;
+  }
+
+  /* ---------- cover ---------- */
+
+  .slide--cover h1 {
+    font-size: clamp(40px, 6vw, 78px);
+    font-weight: 800;
+    line-height: 1.05;
+    position: relative;
+    display: inline-block;
+    max-width: 16ch;
+  }
+  .slide--cover .speaker {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(20px, 2.6vw, 32px);
+    color: var(--cream);
+    margin-top: clamp(14px, 2.4vh, 24px);
+    position: relative;
+    display: inline-block;
+  }
+
+  /* ---------- section ("Título") ---------- */
+
+  .slide--section { align-items: center; text-align: center; }
+  .slide--section h2 {
+    font-size: clamp(34px, 5.2vw, 64px);
+    font-weight: 800;
+  }
+  .slide--section .sub {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(16px, 1.8vw, 22px);
+    color: var(--cream);
+    margin-top: clamp(14px, 2.2vh, 22px);
+    max-width: 56ch;
+  }
+
+  /* ---------- contact ---------- */
+
+  .slide--contact { justify-content: center; }
+  .slide--contact .rule {
+    width: 2px;
+    height: clamp(36px, 6vh, 60px);
+    background: var(--cream);
+    margin-bottom: clamp(16px, 2.4vh, 24px);
+  }
+  .slide--contact h2 {
+    font-size: clamp(32px, 4.6vw, 56px);
+    font-weight: 800;
+    margin-bottom: clamp(20px, 3vh, 32px);
+  }
+  .contact-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.8vh, 16px);
+  }
+  .contact-list li {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(16px, 1.8vw, 21px);
+    color: var(--cream);
+  }
+
+  /* ---------- thanks ---------- */
+
+  .slide--thanks { justify-content: center; padding-bottom: 0; }
+  .slide--thanks h2 {
+    font-size: clamp(48px, 7vw, 92px);
+    font-weight: 800;
+  }
+  .slide--thanks .underline {
+    width: clamp(120px, 14vw, 180px);
+    height: 6px;
+    border-radius: 3px;
+    background: var(--cream);
+    margin-top: clamp(14px, 2vh, 20px);
+    opacity: 0.9;
+  }
+  .sponsors-footer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    display: block;
+  }
+
+  /* ---------- paper surface (content molds) ---------- */
+
+  .slide--paper {
+    background: var(--footer-bg);
+    color: var(--ink);
+  }
+  .slide--paper h2, .slide--paper h3 { color: var(--ink); }
+  .slide--paper .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(11px, 1.15vw, 14px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin: 0 0 clamp(8px, 1.4vh, 14px);
+  }
+  .slide--paper .sub { color: var(--ink-soft); }
+
+  .code-panel {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: clamp(18px, 2.6vh, 28px) clamp(20px, 2.8vw, 30px);
+    font-family: var(--font-mono);
+    font-size: clamp(12.5px, 1.25vw, 16px);
+    line-height: 1.7;
+    color: var(--cream);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-panel .cmt { color: var(--cream-soft); }
+  .code-panel .kw  { color: var(--gold); }
+
+  /* ---------- statement ---------- */
+
+  .slide--statement { align-items: center; text-align: center; }
+  .slide--statement .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(11px, 1.15vw, 14px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 clamp(10px, 1.6vh, 18px);
+  }
+  .slide--statement h2 {
+    font-size: clamp(30px, 4.6vw, 56px);
+    font-weight: 700;
+    max-width: 22ch;
+    line-height: 1.15;
+  }
+  .slide--statement .sub {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--cream-soft);
+    max-width: 52ch;
+    margin-top: clamp(12px, 2vh, 18px);
+  }
+
+  /* ---------- callout (full-bleed) ---------- */
+
+  .slide--callout {
+    background: var(--gold);
+    align-items: center;
+    text-align: center;
+  }
+  .slide--callout .eyebrow { color: rgba(43, 42, 26, 0.65); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: clamp(11px, 1.15vw, 14px); margin-bottom: clamp(10px, 1.6vh, 18px); }
+  .slide--callout h2 {
+    color: var(--ink);
+    font-size: clamp(32px, 5vw, 62px);
+    font-weight: 800;
+    max-width: 20ch;
+  }
+  .slide--callout .sub { color: rgba(43, 42, 26, 0.75); font-size: clamp(15px, 1.6vw, 20px); max-width: 48ch; margin-top: clamp(14px, 2vh, 20px); }
+
+  /* ---------- code ---------- */
+
+  .slide--code h2 { font-size: clamp(24px, 3.2vw, 38px); font-weight: 700; margin-bottom: clamp(18px, 2.8vh, 30px); }
+  .code-grid { display: grid; gap: clamp(14px, 2vw, 22px); flex: none; align-content: start; }
+  .code-grid.cols-1 { grid-template-columns: minmax(0, 1fr); max-width: 76ch; }
+  .code-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .code-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .code-grid .code-panel {
+    font-size: clamp(11.5px, 1.05vw, 14px);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow-x: visible;
+  }
+  .code-caption { font-family: var(--font-mono); font-size: 12px; color: var(--gold-deep); margin-bottom: 8px; font-weight: 600; }
+  .slide--code .sub, .slide--list .sub {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.5vw, 18px);
+    margin-top: clamp(14px, 2.2vh, 22px);
+    max-width: 68ch;
+  }
+
+  /* ---------- tree ---------- */
+
+  .slide--tree { background: var(--olive-deep); }
+  .slide--tree .eyebrow { color: var(--gold); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: clamp(11px, 1.15vw, 14px); margin-bottom: clamp(10px, 1.6vh, 16px); }
+  .slide--tree h2 { color: var(--cream); font-size: clamp(24px, 3.2vw, 38px); font-weight: 700; margin-bottom: clamp(18px, 2.8vh, 30px); }
+  .tree-panel {
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1.3vw, 17px);
+    line-height: 1.85;
+    color: var(--cream);
+    white-space: pre;
+  }
+  .tree-panel .dim { color: var(--cream-soft); }
+  .tree-panel .hi { color: var(--gold); }
+  .slide--tree .sub {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.5vw, 18px);
+    color: var(--cream-soft);
+    margin-top: clamp(14px, 2.2vh, 22px);
+    max-width: 62ch;
+  }
+
+  /* ---------- list ---------- */
+
+  .slide--list h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(24px, 4vh, 40px); }
+  .num-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 20px); max-width: 62ch; }
+  .num-list li { display: flex; gap: 16px; align-items: flex-start; font-size: clamp(16px, 1.7vw, 21px); line-height: 1.5; }
+  .num-list .n {
+    flex: none;
+    width: clamp(28px, 2.6vw, 34px);
+    height: clamp(28px, 2.6vw, 34px);
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(13px, 1.3vw, 16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .num-list code { font-family: var(--font-mono); background: rgba(43,42,26,0.08); padding: 1px 7px; border-radius: 5px; font-size: 0.85em; }
+
+  /* ---------- aside (nota al margen) ---------- */
+
+  .slide--aside { justify-content: center; }
+  .note-card {
+    border: 1.5px dashed var(--gold-deep);
+    border-radius: 14px;
+    padding: clamp(20px, 3vh, 32px) clamp(22px, 3vw, 34px);
+    max-width: 64ch;
+    background: rgba(224, 168, 58, 0.08);
+  }
+  .note-card .eyebrow { color: var(--gold-deep); }
+  .note-card p { margin: 0; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.6; }
+
+  @media (max-width: 720px) {
+    .bird--perched { height: 26vh; }
+    .bird--looking { height: 20vh; }
+    .bird--flying { height: 22vh; }
+    .dots-strip { width: 46%; }
+    .slide { padding: 56px 22px; }
+    .slide--cover h1 { font-size: 34px; }
+    .slide--cover .speaker { font-size: 20px; }
+    .slide--section h2 { font-size: 30px; }
+    .slide--section .sub { font-size: 15.5px; }
+    .slide--contact h2 { font-size: 30px; }
+    .contact-list li { font-size: 16px; }
+    .slide--thanks h2 { font-size: 40px; }
+    .slide--statement h2 { font-size: 26px; }
+    .slide--statement .sub { font-size: 15.5px; }
+    .slide--callout h2 { font-size: 28px; }
+    .slide--callout .sub { font-size: 16px; }
+    .slide--code h2, .slide--tree h2, .slide--list h2 { font-size: 24px; }
+    .code-grid.cols-2, .code-grid.cols-3 { grid-template-columns: 1fr; }
+    .code-panel { font-size: 12.5px; }
+    .num-list li { font-size: 16.5px; }
+    .tree-panel { font-size: 13px; }
+    .note-card p { font-size: 15.5px; }
+  }
+
+  .chrome-bottom::-webkit-scrollbar { display: none; }
+</style>
+
+<div class="app">
+  <div class="chrome-top">
+    <span>Más allá del notebook · PyDay Boyacá 2026</span>
+    <span class="counter" id="counter">1 / 16</span>
+  </div>
+
+  <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <button class="nav-arrow nav-arrow--next" id="nextBtn" aria-label="Slide siguiente">›</button>
+
+  <div class="deck" id="deck">
+
+    <!-- 1 · COVER -->
+    <section class="slide slide--cover" data-label="Portada">
+      <div class="brand-mark"><span class="py">PyDay</span><span class="place">Boyacá 2026</span></div>
+      <h1>Más allá del notebook<span class="sparkle" style="top:-6px; right:-30px;">✨</span></h1>
+      <p class="speaker">Juanfe Martínez</p>
+      <div class="dots-strip"></div>
+      <img class="bird bird--perched" src="assets/bird-perched.png" alt="">
+    </section>
+
+    <!-- 2 · SECTION — Gancho -->
+    <section class="slide slide--section" data-label="Gancho">
+      <h2>Streamly necesita saber quién va a cancelar</h2>
+      <p class="sub">Un CSV de cien mil filas. Una semana después: "¿probamos con Random Forest?" Ahí — sin que nadie se dé cuenta — empieza la historia real de esta charla.</p>
+      <div class="dots-strip"></div>
+      <img class="bird bird--looking" src="assets/bird-looking.png" alt="">
+    </section>
+
+    <!-- 3 · CODE — Etapa 1 -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 1 — El notebook">
+      <p class="eyebrow">Etapa 1 · data → preprocessing → model → evaluation</p>
+      <h2>churn_prediction.ipynb</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel"><span class="cmt"># cleaning</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])
+
+<span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+modelo = <span class="kw">LogisticRegression</span>(max_iter=1000)
+modelo.fit(X_train, y_train)</div>
+      </div>
+      <p class="sub">Todo funciona. 15 celdas, cada una hace una cosa — esto no tiene nada de malo.</p>
+    </section>
+
+    <!-- 4 · ASIDE — nota al margen (leakage) -->
+    <section class="slide slide--paper slide--aside" data-label="Nota al margen — leakage">
+      <p class="eyebrow">Nota al margen</p>
+      <div class="note-card">
+        <p>Como cada cliente de Streamly aparece varias veces (una fila por mes), ese <code style="font-family:var(--font-mono); background:transparent;">random_state=42</code> puede dejar el mes 3 de un cliente en train y su mes 4 en test. Es un problema real y da para una charla completa — hoy no es el que nos ocupa. Sigamos.</p>
+      </div>
+    </section>
+
+    <!-- 5 · CODE — Etapa 2 -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 2 — Probemos otro modelo">
+      <p class="eyebrow">Etapa 2 · Logistic Regression, Random Forest, XGBoost, LightGBM</p>
+      <h2>Copiar, pegar, cambiar una línea</h2>
+      <div class="code-grid cols-3">
+        <div><div class="code-caption">Modelo 1</div><div class="code-panel">modelo_1 = <span class="kw">LogisticRegression</span>(
+    max_iter=1000
+)
+modelo_1.fit(X_train, y_train)
+auc_1 = roc_auc_score(
+    y_test,
+    modelo_1.predict_proba(X_test)[:, 1]
+)</div></div>
+        <div><div class="code-caption">Modelo 2</div><div class="code-panel">modelo_2 = <span class="kw">RandomForestClassifier</span>(
+    n_estimators=300
+)
+modelo_2.fit(X_train, y_train)
+auc_2 = roc_auc_score(
+    y_test,
+    modelo_2.predict_proba(X_test)[:, 1]
+)</div></div>
+        <div><div class="code-caption">Modelo 3</div><div class="code-panel">modelo_3 = <span class="kw">XGBClassifier</span>()
+
+modelo_3.fit(X_train, y_train)
+auc_3 = roc_auc_score(
+    y_test,
+    modelo_3.predict_proba(X_test)[:, 1]
+)</div></div>
+      </div>
+      <p class="sub" style="font-weight:700; color:var(--ink); font-size: clamp(18px,2vw,24px);">¿Dónde ponemos el código que todos estos modelos comparten?</p>
+    </section>
+
+    <!-- 6 · LIST — Etapa 3 features -->
+    <section class="slide slide--paper slide--list" data-label="Etapa 3 — Feature engineering">
+      <p class="eyebrow">Etapa 3 · Feature engineering</p>
+      <h2>Combinando columnas de Streamly</h2>
+      <ol class="num-list">
+        <li><span class="n">1</span><span><code>engagement_score</code> = <code>sessions_last_30d</code> × <code>completion_rate</code></span></li>
+        <li><span class="n">2</span><span><code>payment_risk</code> — función de <code>failed_payments</code> y <code>payment_method</code></span></li>
+        <li><span class="n">3</span><span><code>customer_activity</code> — combinación de <code>devices_used</code> y <code>unique_content_last_30d</code></span></li>
+        <li><span class="n">4</span><span><code>support_intensity</code> = <code>support_tickets</code> + <code>complaints</code></span></li>
+      </ol>
+      <p class="sub">💀 Y ahora hay 4 notebooks distintos — nadie recuerda cuál tiene el <code>engagement_score</code> corregido.</p>
+    </section>
+
+    <!-- 7 · TREE — Etapa 3 nace src/ -->
+    <section class="slide slide--tree" data-label="Etapa 3 — nace src/">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>src/</h2>
+      <div class="tree-panel">├── data/          <span class="dim"># cargar y limpiar streamly_churn.csv</span>
+├── features/      <span class="dim"># engagement_score, payment_risk...</span>
+├── models/        <span class="dim"># una función de entrenamiento por modelo</span>
+├── evaluation/    <span class="dim"># roc_auc, matriz de confusión...</span>
+└── utils/</div>
+      <p class="sub">El notebook deja de ser el lugar donde vive el código. Pasa a ser el lugar donde se usa el código.</p>
+    </section>
+
+    <!-- 8 · LIST — Etapa 4 variantes -->
+    <section class="slide slide--paper slide--list" data-label="Etapa 4 — Experimentación">
+      <p class="eyebrow">Etapa 4 · Experimentación</p>
+      <h2>¿Qué combinación funciona mejor?</h2>
+      <ol class="num-list">
+        <li><span class="n">1</span><span>Con <code>engagement_score</code> y sin él</span></li>
+        <li><span class="n">2</span><span>XGBoost con <code>max_depth=4</code> vs <code>max_depth=8</code></span></li>
+        <li><span class="n">3</span><span>Con o sin <code>payment_risk</code></span></li>
+      </ol>
+    </section>
+
+    <!-- 9 · CODE — Etapa 4 yaml -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 4 — config yaml">
+      <p class="eyebrow">Etapa 4 · Experimentación</p>
+      <h2>configs/experimento_01.yaml</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel">model: xgboost
+features:
+  - engagement_score
+  - payment_risk
+  - support_intensity
+hyperparameters:
+  max_depth: 6
+  learning_rate: 0.05
+  n_estimators: 300</div>
+      </div>
+      <p class="sub">Ya no estamos entrenando un modelo. Estamos gestionando experimentos.</p>
+    </section>
+
+    <!-- 10 · LIST — Etapa 5 completa -->
+    <section class="slide slide--paper slide--list" data-label="Etapa 5 — Reproducibilidad">
+      <p class="eyebrow">Etapa 5 · Reproducibilidad — en el standup...</p>
+      <h2>¿Cómo obtuviste ese 0.91 de ROC-AUC?</h2>
+      <ol class="num-list">
+        <li><span class="n">1</span><span>qué versión de <code>streamly_churn.csv</code> se usó</span></li>
+        <li><span class="n">2</span><span>qué features estaban activas ese día</span></li>
+        <li><span class="n">3</span><span>qué modelo y qué hiperparámetros</span></li>
+        <li><span class="n">4</span><span>qué <code>random_state</code></span></li>
+        <li><span class="n">5</span><span>qué preprocesamiento tenía el notebook en ese momento</span></li>
+      </ol>
+      <p class="sub">La solución no es acordarse mejor — es dejar de depender de la memoria.</p>
+    </section>
+
+    <!-- 11 · TREE — Etapa 6 árbol completo -->
+    <section class="slide slide--tree" data-label="Etapa 6 — El proyecto">
+      <p class="eyebrow">Etapa 6 · El proyecto</p>
+      <h2>streamly-churn/</h2>
+      <div class="tree-panel">├── data/
+├── notebooks/          <span class="dim"># exploración, ya no producción</span>
+├── src/
+│   ├── data/
+│   ├── features/
+│   ├── models/
+│   └── evaluation/
+├── configs/
+├── experiments/         <span class="dim"># resultados + config de cada corrida</span>
+├── tests/
+├── <span class="hi">train.py</span>
+├── <span class="hi">predict.py</span>
+└── README.md</div>
+    </section>
+
+    <!-- 12 · CALLOUT — el protagonista -->
+    <section class="slide slide--callout" data-label="Etapa 6 — callout">
+      <p class="eyebrow">Etapa 6 · El proyecto</p>
+      <h2>El verdadero protagonista no es XGBoost.</h2>
+      <p class="sub">Son las decisiones que nos llevaron a necesitar XGBoost, MLflow y Docker — y ninguna se tomó de un tirón.</p>
+    </section>
+
+    <!-- 13 · STATEMENT — cierre -->
+    <section class="slide slide--statement" data-label="Cierre">
+      <p class="eyebrow">Cierre</p>
+      <h2>¿Tienes una carpeta con _final_v2_de_verdad.ipynb?</h2>
+      <p class="sub">No hiciste nada mal. Es la señal de que tu proyecto ya superó lo que un solo notebook puede sostener.</p>
+      <p class="sub">Nadie "se gana el derecho" a tener src/. Se gana la primera vez que alguien pregunta "¿dónde va el código compartido?" y no hay una buena respuesta.</p>
+    </section>
+
+    <!-- 14 · CALLOUT — mensaje final -->
+    <section class="slide slide--callout" data-label="Cierre final">
+      <p class="eyebrow">Gracias por acompañar la charla</p>
+      <h2>Tu notebook no falló.</h2>
+      <p class="sub">Es la primera señal de que tu proyecto está listo para evolucionar.</p>
+    </section>
+
+    <!-- 15 · CONTACT -->
+    <section class="slide slide--contact" data-label="Contacto">
+      <div class="rule"></div>
+      <h2>Contacto</h2>
+      <ul class="contact-list">
+        <li>jmartinezbernal02@gmail.com</li>
+      </ul>
+      <div class="dots-strip"></div>
+      <img class="bird bird--looking" src="assets/bird-looking.png" alt="">
+    </section>
+
+    <!-- 16 · THANKS -->
+    <section class="slide slide--thanks" data-label="Cierre / gracias">
+      <div class="brand-mark"><span class="py">PyDay</span><span class="place">Boyacá 2026</span></div>
+      <h2>¡Gracias!</h2>
+      <div class="underline"></div>
+      <img class="bird bird--flying" src="assets/bird-flying.png" alt="">
+      <img class="sponsors-footer" src="assets/sponsors-band.png" alt="Python Colombia · PyLadies Boyacá · Django Girls Colombia">
+    </section>
+
+  </div>
+
+  <div class="chrome-bottom" id="dots"></div>
+</div>
+
+<script>
+  (function () {
+    var deck = document.getElementById('deck');
+    var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+    var dotsEl = document.getElementById('dots');
+    var counterEl = document.getElementById('counter');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var current = 0;
+
+    slides.forEach(function (slide, i) {
+      var dot = document.createElement('button');
+      dot.className = 'dot';
+      dot.setAttribute('aria-label', (i + 1) + '. ' + (slide.dataset.label || 'Slide'));
+      dot.addEventListener('click', function () { go(i); });
+      dotsEl.appendChild(dot);
+    });
+
+    function render() {
+      var appEl = document.querySelector('.app');
+      var slideWidth = appEl.clientWidth;
+      deck.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
+      counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+        dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+      });
+      prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+      nextBtn.style.visibility = current === slides.length - 1 ? 'hidden' : 'visible';
+      var activeDot = dotsEl.children[current];
+      if (activeDot && dotsEl.scrollWidth > dotsEl.clientWidth) {
+        var dotsRect = dotsEl.getBoundingClientRect();
+        var dotRect = activeDot.getBoundingClientRect();
+        var delta = (dotRect.left + dotRect.width / 2) - (dotsRect.left + dotsRect.width / 2);
+        dotsEl.scrollLeft += delta;
+      }
+    }
+
+    function go(i) {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      render();
+    }
+
+    prevBtn.addEventListener('click', function () { go(current - 1); });
+    nextBtn.addEventListener('click', function () { go(current + 1); });
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(current + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(current - 1); }
+      else if (e.key === 'Home') { go(0); }
+      else if (e.key === 'End') { go(slides.length - 1); }
+    });
+
+    var touchStartX = 0, touchStartY = 0, touchTracking = false, touchHorizontal = false;
+    deck.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchTracking = true;
+      touchHorizontal = false;
+    }, { passive: true });
+
+    deck.addEventListener('touchmove', function (e) {
+      if (!touchTracking || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - touchStartX;
+      var dy = e.touches[0].clientY - touchStartY;
+      if (!touchHorizontal && Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        touchHorizontal = true;
+      }
+      if (touchHorizontal && e.cancelable) { e.preventDefault(); }
+    }, { passive: false });
+
+    deck.addEventListener('touchend', function (e) {
+      if (!touchTracking) return;
+      touchTracking = false;
+      if (!touchHorizontal) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) < 40) return;
+      if (dx < 0) { go(current + 1); } else { go(current - 1); }
+    });
+
+    deck.addEventListener('touchcancel', function () {
+      touchTracking = false;
+      touchHorizontal = false;
+    });
+
+    window.addEventListener('resize', render);
+
+    render();
+  })();
+</script>
