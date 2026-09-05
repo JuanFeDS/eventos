@@ -26,11 +26,14 @@ Esto cambia el criterio de éxito del taller: no es "cuánto tutorial cubrimos",
 - Se recomienda que las asistentes completen el **capítulo de instalación antes del evento**, para poder "empezar a programar de inmediato" el día del taller — esto es una decisión logística a coordinar con las organizadoras de Boyacá.
 - Formato de trabajo: coaches trabajan con **grupos de ~3 participantes**, no charlas frontales. El coach se mantiene "al margen, no al frente" del grupo.
 
-**Pendiente de confirmar con las organizadoras locales** (no está en el manual genérico):
-- Horario exacto del 2026-09-11
-- Si habrá sesión de instalación previa (¿cuándo?)
-- Cuántas asistentes / cuántos coaches habrá, y si a Juan le asignan un grupo fijo
-- Sistemas operativos que van a traer las asistentes (Windows vs Mac vs Linux) — condiciona cómo preparar instalación
+**Confirmado**:
+- Horario: viernes 2026-09-11, ~9:00am-5:00pm, presencial
+- Sesión de instalación previa (prework): martes 2026-09-08, 7:30pm, virtual y en vivo
+- Juan tendrá grupo físico fijo
+
+**Sigue pendiente de confirmar con las organizadoras locales**:
+- Cuántas asistentes exactas en el grupo de Juan
+- Sistemas operativos que van a traer las asistentes (Windows vs Mac vs Linux) — condiciona cómo preparar instalación (el prework actual solo cubre Windows)
 
 ---
 
@@ -68,7 +71,7 @@ Es lo que las asistentes siguen paso a paso. El taller completo no necesariament
 
 **Nota de scope**: el manual de coaching menciona que el contenido "core" cabe en 7-8 horas, pero en la práctica muchos talleres no llegan a los formularios (cap. 23) o a "amplía tu aplicación" (cap. 22). El deploy (cap. 13) suele ser, junto con instalación, donde más tiempo se va por problemas técnicos.
 
-**Falta definir**: qué capítulos concretos cubrir en Boyacá según las horas reales del evento (ver pendiente logístico arriba). Es el primer bloqueante para cerrar el scope del taller.
+**Corte de capítulos definido**: ver [`taller-contenido.md`](taller-contenido.md) para el cronograma completo con la selección de capítulos según las horas reales confirmadas.
 
 ---
 
@@ -157,11 +160,12 @@ Relevante confirmar: **si el evento de Boyacá va a tener meta-coaches o si Juan
 ## 5. Checklist de preparación para Juan
 
 ### Antes del evento
-- [ ] Confirmar horario exacto, ubicación y duración del 2026-09-11 con organizadoras
-- [ ] Confirmar si hay sesión de instalación previa y cuándo
-- [ ] Confirmar cuántas asistentes por coach y si Juan tendrá grupo fijo
+- [x] Confirmar horario exacto y duración del 2026-09-11 con organizadoras
+- [x] Confirmar si hay sesión de instalación previa y cuándo
+- [x] Confirmar si Juan tendrá grupo fijo
+- [ ] Confirmar cuántas asistentes exactas en el grupo
 - [ ] Repasar el tutorial completo (cap. 1-24) haciéndolo él mismo de punta a punta, no solo leerlo
-- [ ] Definir junto con organizadoras/otros coaches qué capítulos son el "core" a cubrir según las horas reales
+- [x] Definir qué capítulos son el "core" a cubrir según las horas reales — ver [`taller-contenido.md`](taller-contenido.md)
 - [ ] Preparar instalación en ambos SO más probables (Windows/Mac) por si toca ayudar fuera de su SO principal
 - [ ] Revisar si hay traducción/localización específica pendiente en el tutorial en español (posible tema de contribución)
 
