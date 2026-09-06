@@ -13,6 +13,6 @@
 - `prework/` — material del prework
   - `slides/` — slides del prework
     - `template.html` — plantilla/guía de diseño con los 6 moldes reutilizables (referencia)
-    - `prework.html` — deck completo, 30 slides, los 9 temas + terminal personalizada + conexión Git-GitHub
+    - `prework.html` — deck completo, 36 slides, los 10 temas + terminal personalizada + conexión Git-GitHub + cuenta y token de PythonAnywhere + video de Code.org
   - `assets/` — capturas de pantalla, embebidas en `prework.html` (base64)
     - `terminal-powershell.png` · `terminal-personalizada.png` · `python-descarga.png` · `vscode-instalado.png` · `github-registro.png` · `git-instalador.png` · `gh-auth-login.png`
