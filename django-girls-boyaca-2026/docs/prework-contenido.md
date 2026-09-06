@@ -43,7 +43,13 @@ Borrador para revisión antes de pasar a slides. Objetivo del prework: que las a
 - **Conectar Git con GitHub vía GitHub CLI** (`gh auth login` + `gh auth setup-git`) — decisión de scope de Juan (no es parte del tutorial oficial, que despliega por PythonAnywhere). Se eligió GitHub CLI sobre claves SSH manuales por ser mucho menos propenso a errores para principiantes (login por navegador, sin generar/copiar/pegar claves)
 - Aclaración explícita: todavía no se hace ningún `git commit` — eso es del taller. Lo que se resuelve en el prework es la conexión de cuentas, no el uso de Git en sí
 
-## 8. Checklist final de verificación
+## 8. Cuenta de PythonAnywhere
+- Contexto: es donde se hace el deploy del blog (tutorial oficial, cap. 13) — decidimos hacerlo temprano en el taller (ver `taller-contenido.md`), así que la cuenta debe estar lista de antemano, igual que GitHub
+- Crear cuenta gratuita ("Beginner", sin tarjeta) en pythonanywhere.com
+- Generar el token de API desde `Account` → `API Token` — se usa en el script de autoconfiguración del deploy (`pa_autoconfigure_django.py`)
+- Sin uso todavía — solo tener la cuenta y el token listos
+
+## 9. Checklist final de verificación
 - Lista tipo "si todo esto funciona, estás lista para el taller":
   - [ ] Terminal abre sin error
   - [ ] `python --version` responde
@@ -52,15 +58,18 @@ Borrador para revisión antes de pasar a slides. Objetivo del prework: que las a
   - [ ] Cuenta de GitHub creada
   - [ ] `git --version` responde
   - [ ] `gh auth status` muestra el usuario de GitHub conectado
+  - [ ] Cuenta de PythonAnywhere creada
+  - [ ] Token de API generado en PythonAnywhere
 
-## 9. Canal de ayuda
-- A dónde escribir si algo no instaló (grupo/chat de contacto, a definir)
+## 10. Canal de ayuda
+- WhatsApp: +57 311 875 6670
+- LinkedIn: linkedin.com/in/juanfe-martinez
 - Mensaje de cierre: "escríbenos antes del taller, no el mismo día a última hora"
 
 ---
 
 ## Pendientes para cerrar antes de pasar a slides
-- [ ] Definir canal de ayuda concreto (WhatsApp/Telegram/otro)
+- [x] Definir canal de ayuda concreto — **WhatsApp +57 311 875 6670 y LinkedIn (juanfe-martinez)**
 - [x] Confirmar si el prework es sesión en vivo o autoguiado — **en vivo**, martes 2026-09-08, 7:30pm, virtual
 - [x] Confirmar si el evento es virtual o presencial — **prework virtual, taller presencial** (viernes 2026-09-11)
 - [ ] Espacio en disco estimado a mencionar en sección 2

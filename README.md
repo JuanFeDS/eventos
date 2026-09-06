@@ -48,10 +48,11 @@ eventos/
 
 ### 🐍 Django Girls Boyacá 2026 — Taller
 - ✅ Investigación de base: manual de coaching oficial + tutorial de Django Girls resumidos en `docs/preparacion.md`
-- ✅ Prework de instalación completo: 30 slides interactivas (`prework/slides/prework.html`) cubriendo línea de comandos, Python, terminal personalizada, VS Code, GitHub, Git + conexión con GitHub CLI, y checklist final con progreso guardado por navegador
+- ✅ Prework de instalación completo: 36 slides interactivas (`prework/slides/prework.html`) cubriendo línea de comandos, Python, terminal personalizada, VS Code, GitHub, Git + conexión con GitHub CLI, cuenta y token de PythonAnywhere, video motivacional de Code.org, y checklist final con progreso guardado por navegador
 - ✅ Logística confirmada: prework en vivo y virtual el martes 2026-09-08 (7:30pm), taller presencial el viernes 2026-09-11 (9am-5pm), Juan con grupo físico fijo
 - ✅ Contenido del taller cerrado: cronograma completo con corte de capítulos en `docs/taller-contenido.md`, incluye deploy temprano a PythonAnywhere
-- 🟡 Pendiente: slides del taller, canal de ayuda concreto (WhatsApp/Telegram), número exacto de asistentes y sistemas operativos que van a traer
+- ✅ Canal de ayuda definido: WhatsApp +57 311 875 6670 y LinkedIn (juanfe-martinez)
+- 🟡 Pendiente: slides del taller, número exacto de asistentes y sistemas operativos que van a traer
 
 ### 📊 Pyday Boyacá 2026 — Charla
 - 📝 Título y descripción definidos: *"Más allá del notebook: construyendo proyectos de Machine Learning que evolucionan"*
