@@ -363,6 +363,20 @@
     margin-top: clamp(14px, 2vh, 20px);
   }
 
+  /* ---------- video ---------- */
+
+  .slide--video h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(8px, 1.2vh, 12px); }
+  .slide--video .sub { font-size: clamp(14px, 1.4vw, 18px); color: var(--plum); max-width: 60ch; margin-bottom: clamp(20px, 3vh, 32px); }
+  .slide--video .video-frame {
+    width: min(100%, 780px);
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid var(--sand);
+    background: var(--sand);
+  }
+  .slide--video .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
   /* ---------- closing ---------- */
 
   .slide--closing h2 { font-size: clamp(28px, 3.8vw, 48px); font-weight: 700; margin-bottom: clamp(14px, 2vh, 20px); }
@@ -504,7 +518,17 @@
       <p class="sub">Hoy solo lo instalamos y configuramos. Cómo usarlo lo vas a aprender paso a paso en el taller — nada de <code style="font-family:var(--font-mono);">git commit</code> por ahora.</p>
     </section>
 
-    <!-- 7 · CLOSING -->
+    <!-- 7 · VIDEO -->
+    <section class="slide slide--video" data-label="Video embebido">
+      <p class="eyebrow">Antes de instalar nada</p>
+      <h2>Un video corto antes de empezar</h2>
+      <p class="sub">Embed de YouTube (dominio youtube-nocookie.com) centrado, 16:9, con borde sand a juego con el resto de los moldes.</p>
+      <div class="video-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/sDk1pTDPROI" title="Ejemplo de video embebido" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- 8 · CLOSING -->
     <section class="slide slide--closing" data-label="Cierre / ayuda">
       <p class="eyebrow">Ayuda</p>
       <h2>¿Algo no instaló bien?</h2>
@@ -513,16 +537,17 @@
       <p class="footnote">Django Girls Boyacá 2026 — 11 de septiembre</p>
     </section>
 
-    <!-- 8 · GUIDE (meta, referencia para armar el resto de los temas) -->
+    <!-- 9 · GUIDE (meta, referencia para armar el resto de los temas) -->
     <section class="slide slide--guide" data-label="Guía de uso">
       <p class="eyebrow">Guía de uso de esta plantilla</p>
-      <h2>6 moldes para los 9 temas</h2>
+      <h2>7 moldes para los 9 temas</h2>
       <div class="mold-grid">
         <div class="mold"><div class="name">Divisor</div><code>.slide--divider</code><p>Abre cada uno de los 9 temas. Fondo plum, número grande, un título.</p></div>
         <div class="mold"><div class="name">Paso a paso</div><code>.slide--steps</code><p>Instrucciones numeradas + espacio para captura de pantalla al costado.</p></div>
         <div class="mold"><div class="name">Checklist</div><code>.slide--checklist</code><p>Lista de verificación con casillas — usar antes de cerrar un tema.</p></div>
         <div class="mold"><div class="name">Terminal</div><code>.slide--terminal</code><p>Comandos y su salida esperada, para pasos de verificación técnica.</p></div>
         <div class="mold"><div class="name">Callout</div><code>.slide--callout</code><p>Una sola frase importante a pantalla completa — usar con moderación.</p></div>
+        <div class="mold"><div class="name">Video</div><code>.slide--video</code><p>Embed de YouTube 16:9 centrado, con título y bajada — usar con moderación.</p></div>
         <div class="mold"><div class="name">Cierre</div><code>.slide--closing</code><p>Mensaje final del tema o del prework, con vía de contacto.</p></div>
       </div>
     </section>
