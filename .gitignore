@@ -3,3 +3,4 @@ pyday-boyaca-2026/slides/Diapositivas base para PyDay Boyacá.pdf
 
 django-girls-boyaca-2026/venv/
 django-girls-boyaca-2026/db.sqlite3
+__pycache__/
