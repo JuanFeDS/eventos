@@ -17,7 +17,7 @@ Directorio personal de presentaciones, talleres y material de soporte para charl
 
 | Evento | Rol | Fecha | Estado |
 |--------|-----|-------|--------|
-| 🐍 [Django Girls Boyacá 2026](django-girls-boyaca-2026/) | Taller | 2026-09-11 | 🟡 Prework y contenido del taller listos · faltan slides del taller |
+| 🐍 [Django Girls Boyacá 2026](django-girls-boyaca-2026/) | Taller | 2026-09-11 | 🟡 Prework listo · slides del taller en construcción (temas 1-3 de 9) |
 | 📊 [Pyday Boyacá 2026](pyday-boyaca-2026/) | Charla | 2026-09-12 | 🟡 16 slides listas (fondo plano) · falta demo real de código |
 
 ---
@@ -29,10 +29,13 @@ Cada evento vive en su propia carpeta, con su propio README como fuente de verda
 ```
 eventos/
 ├── django-girls-boyaca-2026/
-│   ├── docs/              # investigación: manual de coaching, tutorial oficial, contenido del prework
+│   ├── docs/              # investigación: manual de coaching, tutorial oficial, contenido y ensayo del taller
 │   ├── prework/
 │   │   ├── slides/        # deck HTML del prework (template.html + prework.html)
 │   │   └── assets/        # capturas de pantalla usadas en el deck
+│   ├── taller/
+│   │   └── slides/        # deck HTML del taller (taller.html), en construcción
+│   ├── manage.py, mysite/, requirements.txt  # implementación de referencia del ensayo (venv + pip)
 │   └── README.md
 ├── pyday-boyaca-2026/
 │   ├── docs/              # guion de la charla
@@ -52,7 +55,9 @@ eventos/
 - ✅ Logística confirmada: prework en vivo y virtual el martes 2026-09-08 (7:30pm), taller presencial el viernes 2026-09-11 (9am-5pm), Juan con grupo físico fijo
 - ✅ Contenido del taller cerrado: cronograma completo con corte de capítulos en `docs/taller-contenido.md`, incluye deploy temprano a PythonAnywhere
 - ✅ Canal de ayuda definido: WhatsApp +57 311 875 6670 y LinkedIn (juanfe-martinez)
-- 🟡 Pendiente: slides del taller, número exacto de asistentes y sistemas operativos que van a traer
+- ✅ Ensayo del taller iniciado (orden cronológico): validado en vivo el bloque ¿Qué es Django? + instalación + primer proyecto (venv + pip, `Django~=5.2.12`, no Poetry por fricción con el deploy) — implementación de referencia commiteada, gotcha real de `startproject` documentado
+- 🟡 Slides del taller en construcción: `taller/slides/taller.html` cubre temas 1-3 de 9; faltan deploy, modelos, URLs/vistas, HTML/CSS y cierre
+- 🟡 Pendiente: número exacto de asistentes y sistemas operativos que van a traer
 
 ### 📊 Pyday Boyacá 2026 — Charla
 - 📝 Título y descripción definidos: *"Más allá del notebook: construyendo proyectos de Machine Learning que evolucionan"*
