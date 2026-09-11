@@ -46,7 +46,11 @@ La implementación de referencia del ensayo (`manage.py`, `mysite/`, `requiremen
 
 ## Slides del taller
 
-- [`taller/slides/taller.html`](../taller/slides/taller.html) — mismo motor que el prework (misma plantilla, navegación táctil/teclado, responsive mobile/iPhone). Cubre por ahora los temas 1-3 (¿Qué es Django?, Instalación, Primer proyecto), correspondientes al bloque 10:55-12:10 del cronograma. Los siguientes bloques (deploy, modelos, URLs/vistas, HTML/CSS, cierre) se agregan en sesiones futuras de ensayo, siguiendo el mismo orden cronológico.
+- [`taller/slides/taller.html`](../taller/slides/taller.html) — mismo motor que el prework (misma plantilla, navegación táctil/teclado, responsive mobile/iPhone). Cubre por ahora:
+  - Temas 1-3: ¿Qué es Django?, Instalación, Primer proyecto — bloque 10:55-12:10 del cronograma
+  - Tema 4: Clases y objetos (OOP) con analogía de Pokémon en vez del ejemplo típico de carros — pensado para ir al inicio del bloque "Modelos + Admin (cap. 11-12)" de 13:55, reemplazando la analogía del gato que trae el tutorial oficial en ese mismo capítulo. No suma tiempo al cronograma, se integra dentro de los 45 min ya asignados
+  - Cuando se agregue el contenido de Deploy (cap. 13, bloque 12:10), va a insertarse como nuevo Tema 4 y este tema de OOP pasa a ser el Tema 5 — mismo patrón de renumeración que ya se usó en el prework
+  - Los bloques restantes (deploy, URLs/vistas, HTML/CSS, cierre) se agregan en sesiones futuras de ensayo, siguiendo el mismo orden cronológico
 
 ## Pendientes para cerrar antes del taller
 
