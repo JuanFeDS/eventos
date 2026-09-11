@@ -31,3 +31,12 @@ Reemplaza a Spaceship Titanic (decisión 2026-09-05) — la corrección pendient
 Mismo motor de navegación del prework de Django Girls (flechas, dots, swipe táctil, teclado). Assets reales (colibríes + franja de auspiciantes) en `slides/assets/`.
 
 Pendiente: el ícono de Python del logo original tiene marca de agua de Canva sin licenciar — el logo quedó reconstruido solo con texto hasta que se resuelva. El dato de contacto solo tiene el correo por ahora (a definir si se agregan GitHub/portafolio).
+
+## Demo de código
+
+`demo-streamly/` contiene la evolución real del caso de estudio, corrida contra el dataset real (`data/streamly_churn.csv`, 90.000 filas) — solo para proyectar en pantalla, no se ejecuta en vivo:
+
+- `01_notebook/` — el "antes": cuatro notebooks que muestran el caos progresivo de las etapas 1-3 del guion (`churn_prediction.ipynb` → `churn_prediction_final.ipynb` → `churn_prediction_final_v2.ipynb` → `churn_prediction_final_v3_de_verdad.ipynb`), cada uno más desordenado que el anterior: comparación de modelos copy-pasteada, features agregadas a mitad de notebook, un experimento colgado que nadie limpió y una versión vieja de `engagement_score` comentada y olvidada.
+- `02_pipeline/` — el "después": versión modular reducida (`src/data`, `src/features`, `src/models`, `src/evaluation` + `train.py`), sin `configs/` ni `experiments/` (esas dos etapas se explican en las slides sin código real corriendo). Se corre con `pip install -r requirements.txt && python train.py`.
+
+AUC-ROC real de los 4 modelos sobre el set de prueba: XGBoost 0.772, LightGBM 0.768, Random Forest 0.764, Logistic Regression 0.762 (con `StandardScaler` para que converja limpio).
