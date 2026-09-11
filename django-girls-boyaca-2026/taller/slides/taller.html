@@ -291,8 +291,34 @@
   .help-slot:hover { background: var(--coral); color: var(--paper); }
   .footnote { margin-top: clamp(30px, 5vh, 48px); font-size: clamp(12px, 1.1vw, 14px); color: rgba(34, 28, 46, 0.55); max-width: 48ch; }
 
+  /* ---------- code (clase/objeto en Python plano, sin salida de terminal) ---------- */
+
+  .code-block {
+    background: var(--plum); border-radius: 14px;
+    padding: clamp(20px, 3vh, 30px) clamp(22px, 3vw, 34px);
+    max-width: 62ch; font-family: var(--font-mono); font-size: clamp(14px, 1.4vw, 18px); line-height: 1.8;
+    color: var(--paper); white-space: pre; overflow-x: auto;
+  }
+  .code-block .kw { color: var(--coral); }
+  .code-block .cm { color: rgba(255, 248, 244, 0.45); }
+  .code-block .out { color: var(--mint); }
+
+  /* ---------- compare (dos columnas lado a lado) ---------- */
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); width: 100%; max-width: 78ch; }
+  .compare-card { background: var(--sand); border-radius: 14px; padding: clamp(20px, 3vw, 28px); }
+  .compare-card .compare-label {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(16px, 1.7vw, 20px);
+    color: var(--plum); margin-bottom: clamp(12px, 2vh, 18px);
+  }
+  .compare-card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 14px); }
+  .compare-card li { font-size: clamp(13.5px, 1.35vw, 16.5px); line-height: 1.45; color: var(--ink); }
+  .compare-card code { font-family: var(--font-mono); background: rgba(61, 38, 71, 0.1); padding: 1px 6px; border-radius: 5px; font-size: 0.85em; }
+
   @media (max-width: 720px) {
     .steps-layout { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .code-block { font-size: 13.5px; }
     .checklist-cols { grid-template-columns: 1fr; }
     .screenshot-slot { aspect-ratio: 16 / 9; }
     .nav-arrow { display: none; }
@@ -348,6 +374,7 @@
         <span class="route-item"><span class="n">1</span>¿Qué es Django?</span>
         <span class="route-item"><span class="n">2</span>Instalación</span>
         <span class="route-item"><span class="n">3</span>Primer proyecto</span>
+        <span class="route-item"><span class="n">4</span>Clases y objetos</span>
       </div>
     </section>
 
@@ -480,6 +507,73 @@
       <h2>Ya tienes un sitio Django corriendo.</h2>
       <p class="sub">Abre <code>http://127.0.0.1:8000</code> en el navegador — si ves un cohete y el mensaje "The install worked successfully!", vas por buen camino. Lo próximo: ponerlo en internet.</p>
       <p class="footnote">Django Girls Boyacá 2026 — cronograma completo en docs/taller-contenido.md</p>
+    </section>
+
+    <!-- TEMA 4 · Clases y objetos -->
+    <section class="slide slide--divider" data-label="Tema 4 · Clases y objetos" data-kind="divider">
+      <div class="num">04</div>
+      <h2>Antes de los modelos: clases y objetos</h2>
+      <p class="sub">La idea que hace que todo lo demás tenga sentido</p>
+    </section>
+
+    <section class="slide slide--closing" data-label="Una clase es un molde">
+      <p class="eyebrow">El molde y la cosa</p>
+      <h2>Una clase es un molde. Un objeto es lo que sale de ese molde.</h2>
+      <p class="sub">Piensa en la Pokédex: describe qué es un Pokémon en general — que tiene nombre, tipo, y sabe atacar — sin ser ninguno en particular. Cada Pokémon que atrapas es distinto. Ese Pokémon concreto es el objeto.</p>
+    </section>
+
+    <section class="slide slide--terminal" data-label="El molde en código">
+      <p class="eyebrow" style="color: var(--coral);">Código</p>
+      <h2>El molde en código</h2>
+      <p class="sub">Así se ve la Pokédex escrita como clase en Python:</p>
+      <div class="code-block"><span class="kw">class</span> Pokemon:
+    <span class="kw">def</span> __init__(self, nombre, tipo):
+        self.nombre = nombre
+        self.tipo = tipo
+
+    <span class="kw">def</span> atacar(self):
+        <span class="kw">print</span>(f<span class="out">"{self.nombre} usa un ataque tipo {self.tipo}"</span>)</div>
+    </section>
+
+    <section class="slide slide--terminal" data-label="El objeto, hecho con el molde">
+      <p class="eyebrow" style="color: var(--coral);">Código</p>
+      <h2>El objeto, hecho con el molde</h2>
+      <p class="sub">Cada vez que "creas" uno, obtienes un Pokémon distinto — mismo molde, valores propios:</p>
+      <div class="code-block">pikachu = Pokemon(<span class="out">"Pikachu"</span>, <span class="out">"Eléctrico"</span>)
+charmander = Pokemon(<span class="out">"Charmander"</span>, <span class="out">"Fuego"</span>)
+
+pikachu.atacar()  <span class="cm"># Pikachu usa un ataque tipo Eléctrico</span></div>
+    </section>
+
+    <section class="slide slide--callout" data-label="¿Por qué te importa esto?">
+      <p class="eyebrow">¿Por qué te importa esto?</p>
+      <h2>Los modelos de Django son exactamente esto.</h2>
+      <p class="sub"><code>class Post(models.Model):</code> es un molde. Cada entrada de tu blog que crees va a ser un objeto hecho con ese molde — con su propio título, texto y fecha.</p>
+    </section>
+
+    <section class="slide slide--steps" data-label="De Pokémon a Django">
+      <p class="eyebrow">La misma idea, otro nombre</p>
+      <h2>De Pokémon a Django</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-label">🎮 Pokémon</div>
+          <ul>
+            <li>Clase <code>Pokemon</code> — el molde</li>
+            <li>Atributos: <code>nombre</code>, <code>tipo</code></li>
+            <li>Un Pikachu atrapado — el objeto</li>
+            <li>Método: <code>atacar()</code></li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-label">🐍 Django</div>
+          <ul>
+            <li>Clase <code>Post</code> — el molde</li>
+            <li>Campos: <code>title</code>, <code>text</code></li>
+            <li>Una entrada de tu blog — el objeto</li>
+            <li>Método: <code>publish()</code></li>
+          </ul>
+        </div>
+      </div>
     </section>
 
   </div>
