@@ -17,8 +17,8 @@ Directorio personal de presentaciones, talleres y material de soporte para charl
 
 | Evento | Rol | Fecha | Estado |
 |--------|-----|-------|--------|
-| 🐍 [Django Girls Boyacá 2026](django-girls-boyaca-2026/) | Taller | 2026-09-11 | 🟡 Prework listo · slides del taller en construcción (temas 1-3 de 9) |
-| 📊 [Pyday Boyacá 2026](pyday-boyaca-2026/) | Charla | 2026-09-12 | 🟡 16 slides listas (fondo plano) · falta demo real de código |
+| 🐍 [Django Girls Boyacá 2026](django-girls-boyaca-2026/) | Taller | 2026-09-11 | 🟡 Prework listo · slides del taller en construcción (temas 1-4 de ~10) |
+| 📊 [Pyday Boyacá 2026](pyday-boyaca-2026/) | Charla | 2026-09-12 | 🟡 16 slides + demo de código listas · falta resolver logo |
 
 ---
 
@@ -56,7 +56,7 @@ eventos/
 - ✅ Contenido del taller cerrado: cronograma completo con corte de capítulos en `docs/taller-contenido.md`, incluye deploy temprano a PythonAnywhere
 - ✅ Canal de ayuda definido: WhatsApp +57 311 875 6670 y LinkedIn (juanfe-martinez)
 - ✅ Ensayo del taller iniciado (orden cronológico): validado en vivo el bloque ¿Qué es Django? + instalación + primer proyecto (venv + pip, `Django~=5.2.12`, no Poetry por fricción con el deploy) — implementación de referencia commiteada, gotcha real de `startproject` documentado
-- 🟡 Slides del taller en construcción: `taller/slides/taller.html` cubre temas 1-3 de 9; faltan deploy, modelos, URLs/vistas, HTML/CSS y cierre
+- 🟡 Slides del taller en construcción: `taller/slides/taller.html` cubre temas 1-4 (Django, instalación, primer proyecto, clases/objetos con Pokémon); faltan deploy, modelos, URLs/vistas, HTML/CSS y cierre
 - 🟡 Pendiente: número exacto de asistentes y sistemas operativos que van a traer
 
 ### 📊 Pyday Boyacá 2026 — Charla
@@ -64,7 +64,8 @@ eventos/
 - 🎯 Caso de estudio elegido: Streamly (streaming ficticio), churn sintético en panel mensual; dataset generado en `demo-streamly/data/`
 - ✅ Guion completo (gancho + 6 etapas de evolución notebook → pipeline + cierre) en `pyday-boyaca-2026/docs/guion.md`. Leakage/GroupKFold queda como mención breve, no como eje de la charla
 - ✅ Plantilla de slides (`slides/template.html`, 10 moldes, fondo plano) + charla completa armada en 16 slides (`slides/charla.html`) a partir del guion
-- 🔴 Pendiente: el código de demo real de `demo-streamly/01_notebook/` y `02_pipeline/`, y resolver el ícono del logo (marca de agua de Canva)
+- ✅ Demo de código real: `demo-streamly/01_notebook/` (4 notebooks, caos progresivo etapas 1-3) → `demo-streamly/02_pipeline/` (versión modular funcional), corridos contra el dataset real de 90.000 filas
+- 🔴 Pendiente: resolver el ícono del logo (marca de agua de Canva)
 
 ---
 
