@@ -2,7 +2,7 @@
 
 **Fecha**: 2026-09-11 (taller, presencial) · 2026-09-08 (prework, virtual)
 **Formato**: Taller
-**Estado**: Prework completo · slides del taller en construcción (temas 1-3 de 9)
+**Estado**: Prework completo · slides del taller en construcción (temas 1-4 de ~10)
 
 ## Estructura
 
@@ -17,5 +17,5 @@
   - `assets/` — capturas de pantalla, embebidas en `prework.html` (base64)
     - `terminal-powershell.png` · `terminal-personalizada.png` · `python-descarga.png` · `vscode-instalado.png` · `github-registro.png` · `git-instalador.png` · `gh-auth-login.png`
 - `taller/` — material del taller (en construcción)
-  - `slides/taller.html` — deck del taller, mismo motor que el prework. Cubre por ahora ¿Qué es Django?, instalación y primer proyecto (temas 1-3)
+  - `slides/taller.html` — deck del taller, mismo motor que el prework. Cubre por ahora ¿Qué es Django?, instalación, primer proyecto y clases/objetos con analogía Pokémon (temas 1-4)
 - `manage.py`, `mysite/`, `requirements.txt` — implementación de referencia del ensayo del taller (venv + pip, Django~=5.2.12), para que Juan la use como apoyo el día del evento. `venv/` y `db.sqlite3` quedan fuera de git
