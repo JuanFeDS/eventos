@@ -56,6 +56,7 @@
     mix-blend-mode: difference;
   }
   .chrome-top .counter { font-variant-numeric: tabular-nums; }
+  .chrome-top.chrome-top--minimal .chrome-title { opacity: 0; }
 
   .chrome-bottom {
     position: absolute;
@@ -300,6 +301,80 @@
   }
   .code-panel .cmt { color: var(--cream-soft); }
   .code-panel .kw  { color: var(--gold); }
+  .code-panel .str { color: #7CA8D8; }
+  .code-panel .num { color: #E38B57; }
+
+  /* ---------- notebook cell (Jupyter clásico) ---------- */
+
+  .notebook-cell {
+    display: flex;
+    flex-direction: column;
+    background: #FAFAF7;
+    border: 1px solid #DDDBC9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(43, 42, 26, 0.08);
+    font-family: var(--font-mono);
+    font-size: clamp(12.5px, 1.25vw, 16px);
+    line-height: 1.7;
+  }
+  .notebook-cell .nb-input { display: flex; align-items: stretch; }
+  .notebook-cell .nb-prompt {
+    flex: none;
+    padding: clamp(8px, 1.8vh, 28px) 0 clamp(8px, 1.8vh, 28px) clamp(16px, 2vw, 22px);
+    color: #3B6EA5;
+    font-weight: 600;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .notebook-cell .nb-code {
+    flex: 1;
+    margin: 0;
+    padding: clamp(8px, 1.8vh, 28px) clamp(20px, 2.8vw, 30px) clamp(8px, 1.8vh, 28px) clamp(12px, 1.6vw, 18px);
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+    border-left: 1px solid #E7E5D4;
+  }
+  .notebook-cell .nb-code .cmt { color: #6B7A4A; font-style: italic; }
+  .notebook-cell .nb-code .kw  { color: var(--gold-deep); font-weight: 600; }
+  .notebook-cell .nb-code .str { color: #3B6EA5; }
+  .notebook-cell .nb-code .num { color: #B65C1F; }
+
+  .notebook-cell .nb-prompt.is-running { animation: nb-pulse 1s ease-in-out infinite; }
+  @keyframes nb-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.9; } }
+
+  .notebook-cell .nb-output {
+    display: flex;
+    align-items: flex-start;
+    border-top: 1px solid #E7E5D4;
+    background: #F1F0E6;
+    transition: opacity 0.25s ease;
+  }
+  .notebook-cell .nb-output.is-pending { opacity: 0; }
+  .notebook-cell .nb-out-prompt {
+    flex: none;
+    padding: clamp(6px, 1.4vh, 20px) 0 clamp(6px, 1.4vh, 20px) clamp(16px, 2vw, 22px);
+    color: #B65C1F;
+    font-weight: 600;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .notebook-cell .nb-out-content {
+    flex: 1;
+    margin: 0;
+    padding: clamp(6px, 1.4vh, 20px) clamp(20px, 2.8vw, 30px) clamp(6px, 1.4vh, 20px) clamp(12px, 1.6vw, 18px);
+    color: var(--ink);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .code-grid .notebook-cell { font-size: clamp(11.5px, 1.05vw, 14px); }
+  .code-grid .notebook-cell .nb-code {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow-x: visible;
+  }
 
   /* ---------- statement ---------- */
 
@@ -346,8 +421,20 @@
 
   /* ---------- code ---------- */
 
+  .slide--code { justify-content: flex-start; }
   .slide--code h2 { font-size: clamp(24px, 3.2vw, 38px); font-weight: 700; margin-bottom: clamp(18px, 2.8vh, 30px); }
-  .code-grid { display: grid; gap: clamp(14px, 2vw, 22px); flex: none; align-content: start; }
+  .code-grid {
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: clamp(8px, 1.4vw, 22px);
+    flex: none;
+    align-content: start;
+    max-height: clamp(320px, 58vh, 620px);
+    overflow-y: auto;
+    background: rgba(43, 42, 26, 0.08);
+    border-radius: 16px;
+    padding: clamp(16px, 2.4vh, 26px) clamp(16px, 2vw, 22px);
+  }
   .code-grid.cols-1 { grid-template-columns: minmax(0, 1fr); max-width: 76ch; }
   .code-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .code-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -356,6 +443,7 @@
     white-space: pre-wrap;
     overflow-wrap: break-word;
     overflow-x: visible;
+    border: 1px solid rgba(247, 245, 232, 0.15);
   }
   .code-caption { font-family: var(--font-mono); font-size: 12px; color: var(--gold-deep); margin-bottom: 8px; font-weight: 600; }
   .slide--code .sub, .slide--list .sub {
@@ -367,7 +455,7 @@
 
   /* ---------- tree ---------- */
 
-  .slide--tree { background: var(--olive-deep); }
+  .slide--tree { background: var(--olive-deep); justify-content: flex-start; }
   .slide--tree .eyebrow { color: var(--gold); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: clamp(11px, 1.15vw, 14px); margin-bottom: clamp(10px, 1.6vh, 16px); }
   .slide--tree h2 { color: var(--cream); font-size: clamp(24px, 3.2vw, 38px); font-weight: 700; margin-bottom: clamp(18px, 2.8vh, 30px); }
   .tree-panel {
@@ -389,6 +477,7 @@
 
   /* ---------- list ---------- */
 
+  .slide--list { justify-content: flex-start; }
   .slide--list h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(24px, 4vh, 40px); }
   .num-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 20px); max-width: 62ch; }
   .num-list li { display: flex; gap: 16px; align-items: flex-start; font-size: clamp(16px, 1.7vw, 21px); line-height: 1.5; }
@@ -441,6 +530,8 @@
     .slide--code h2, .slide--tree h2, .slide--list h2 { font-size: 24px; }
     .code-grid.cols-2, .code-grid.cols-3 { grid-template-columns: 1fr; }
     .code-panel { font-size: 12.5px; }
+    .notebook-cell { font-size: 12.5px; }
+    .notebook-cell .nb-code { padding: 14px 16px 14px 10px; }
     .num-list li { font-size: 16.5px; }
     .tree-panel { font-size: 13px; }
     .note-card p { font-size: 15.5px; }
@@ -450,9 +541,9 @@
 </style>
 
 <div class="app">
-  <div class="chrome-top">
-    <span>Más allá del notebook · PyDay Boyacá 2026</span>
-    <span class="counter" id="counter">1 / 16</span>
+  <div class="chrome-top" id="chromeTop">
+    <span class="chrome-title">Más allá del notebook · PyDay Boyacá 2026</span>
+    <span class="counter" id="counter">1 / 25</span>
   </div>
 
   <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
@@ -469,12 +560,18 @@
       <img class="bird bird--perched" src="assets/bird-perched.png" alt="">
     </section>
 
-    <!-- 2 · SECTION — Gancho -->
-    <section class="slide slide--section" data-label="Gancho">
-      <h2>Streamly necesita saber quién va a cancelar</h2>
-      <p class="sub">Un CSV de cien mil filas. Una semana después: "¿probamos con Random Forest?" Ahí — sin que nadie se dé cuenta — empieza la historia real de esta charla.</p>
+    <!-- 2 · SECTION — Gancho: presentación de Streamly -->
+    <section class="slide slide--section" data-label="Gancho — Streamly">
+      <h2>Streamly es una plataforma de streaming</h2>
+      <p class="sub">Miles de usuarios, suscripciones mensuales, y un problema que tarde o temprano enfrenta cualquier equipo de datos.</p>
       <div class="dots-strip"></div>
-      <img class="bird bird--looking" src="assets/bird-looking.png" alt="">
+    </section>
+
+    <!-- 2b · SECTION — Gancho: la tarea -->
+    <section class="slide slide--section" data-label="Gancho — la tarea">
+      <h2>Streamly necesita saber quién va a cancelar</h2>
+      <p class="sub">Sacas cien mil filas de la base de datos, las exportas a un CSV, abres un notebook, lo llamas <code style="font-family:var(--font-mono); background:transparent;">churn_prediction.ipynb</code>, y empiezas.</p>
+      <div class="dots-strip"></div>
     </section>
 
     <!-- 3 · CODE — Etapa 1 -->
@@ -482,60 +579,134 @@
       <p class="eyebrow">Etapa 1 · data → preprocessing → model → evaluation</p>
       <h2>churn_prediction.ipynb</h2>
       <div class="code-grid cols-1">
-        <div class="code-panel"><span class="cmt"># cleaning</span>
-df = df.dropna(subset=["monthly_price", "days_since_last_login"])
-
-<span class="cmt"># feature engineering</span>
-df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]
-
-X_train, X_test, y_train, y_test = train_test_split(
+        <div class="notebook-cell">
+          <div class="nb-input">
+            <span class="nb-prompt">In&nbsp;[1]:</span>
+            <pre class="nb-code"><span class="cmt"># cleaning</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre>
+          </div>
+        </div>
+        <div class="notebook-cell">
+          <div class="nb-input">
+            <span class="nb-prompt">In&nbsp;[2]:</span>
+            <pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre>
+          </div>
+        </div>
+        <div class="notebook-cell">
+          <div class="nb-input">
+            <span class="nb-prompt">In&nbsp;[3]:</span>
+            <pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
 modelo = <span class="kw">LogisticRegression</span>(max_iter=1000)
-modelo.fit(X_train, y_train)</div>
+modelo.fit(X_train, y_train)</pre>
+          </div>
+          <div class="nb-output">
+            <span class="nb-out-prompt">Out[3]:</span>
+            <pre class="nb-out-content">LogisticRegression(max_iter=1000)</pre>
+          </div>
+        </div>
       </div>
       <p class="sub">Todo funciona. 15 celdas, cada una hace una cosa — esto no tiene nada de malo.</p>
     </section>
 
-    <!-- 4 · ASIDE — nota al margen (leakage) -->
-    <section class="slide slide--paper slide--aside" data-label="Nota al margen — leakage">
-      <p class="eyebrow">Nota al margen</p>
-      <div class="note-card">
-        <p>Como cada cliente de Streamly aparece varias veces (una fila por mes), ese <code style="font-family:var(--font-mono); background:transparent;">random_state=42</code> puede dejar el mes 3 de un cliente en train y su mes 4 en test. Es un problema real y da para una charla completa — hoy no es el que nos ocupa. Sigamos.</p>
-      </div>
+    <!-- 2c · SECTION — Gancho: el giro -->
+    <section class="slide slide--section" data-label="Gancho — el giro">
+      <h2>Cargas los datos, limpias, entrenas una regresión logística. Funciona.</h2>
+      <p class="sub">Una semana después: "¿probamos con Random Forest?" Ese es el momento exacto en que el notebook deja de alcanzar.</p>
+      <div class="dots-strip"></div>
+      <img class="bird bird--looking" src="assets/bird-looking.png" alt="">
     </section>
 
     <!-- 5 · CODE — Etapa 2 -->
     <section class="slide slide--paper slide--code" data-label="Etapa 2 — Probemos otro modelo">
       <p class="eyebrow">Etapa 2 · Logistic Regression, Random Forest, XGBoost, LightGBM</p>
       <h2>Copiar, pegar, cambiar una línea</h2>
-      <div class="code-grid cols-3">
-        <div><div class="code-caption">Modelo 1</div><div class="code-panel">modelo_1 = <span class="kw">LogisticRegression</span>(
+      <div class="code-grid cols-1">
+        <div><div class="code-caption">Modelo 1</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code">modelo_1 = <span class="kw">LogisticRegression</span>(
     max_iter=1000
 )
 modelo_1.fit(X_train, y_train)
-auc_1 = roc_auc_score(
+roc_auc_score(
     y_test,
     modelo_1.predict_proba(X_test)[:, 1]
-)</div></div>
-        <div><div class="code-caption">Modelo 2</div><div class="code-panel">modelo_2 = <span class="kw">RandomForestClassifier</span>(
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[4]:</span><pre class="nb-out-content">0.831</pre></div></div></div>
+        <div><div class="code-caption">Modelo 2</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">modelo_2 = <span class="kw">RandomForestClassifier</span>(
     n_estimators=300
 )
 modelo_2.fit(X_train, y_train)
-auc_2 = roc_auc_score(
+roc_auc_score(
     y_test,
     modelo_2.predict_proba(X_test)[:, 1]
-)</div></div>
-        <div><div class="code-caption">Modelo 3</div><div class="code-panel">modelo_3 = <span class="kw">XGBClassifier</span>()
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[5]:</span><pre class="nb-out-content">0.876</pre></div></div></div>
+        <div><div class="code-caption">Modelo 3</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo_3 = <span class="kw">XGBClassifier</span>()
 
 modelo_3.fit(X_train, y_train)
-auc_3 = roc_auc_score(
+roc_auc_score(
     y_test,
     modelo_3.predict_proba(X_test)[:, 1]
-)</div></div>
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[6]:</span><pre class="nb-out-content">0.904</pre></div></div></div>
       </div>
-      <p class="sub" style="font-weight:700; color:var(--ink); font-size: clamp(18px,2vw,24px);">¿Dónde ponemos el código que todos estos modelos comparten?</p>
+    </section>
+
+    <!-- 5b · STATEMENT — Etapa 2 pausa -->
+    <section class="slide slide--statement" data-label="Etapa 2 — la pregunta">
+      <p class="eyebrow">Etapa 2 · Experimentación</p>
+      <h2>¿Dónde ponemos el código que todos estos modelos comparten?</h2>
+      <p class="sub">Ya se repitió tres veces el mismo <code style="font-family:var(--font-mono); background:transparent;">.fit()</code> y el mismo cálculo de métrica.</p>
+    </section>
+
+    <!-- RERUN — flujo completo (modelo nuevo) -->
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por un modelo nuevo">
+      <p class="eyebrow">Otra vez — por un modelo nuevo</p>
+      <h2>Para saber esto, hay que correr todo de nuevo</h2>
+      <div class="code-grid cols-1">
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+df = pd.read_csv("streamly_churn.csv")</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
+      </div>
+    </section>
+
+    <!-- 5c · STATEMENT — Etapa 3 transición -->
+    <section class="slide slide--statement" data-label="Etapa 3 — transición">
+      <p class="eyebrow">Etapa 3 · Feature engineering</p>
+      <h2>Ahora hay que calcular algo que no estaba en los datos</h2>
+      <p class="sub">Una variable nueva, que no venía en el dataset original — y ahí un notebook tradicional empieza a salirse de control.</p>
+    </section>
+
+    <!-- RERUN — flujo completo (variable nueva) -->
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por una variable nueva">
+      <p class="eyebrow">Otra vez — por una variable nueva</p>
+      <h2>Para saber esto, hay que correr todo de nuevo</h2>
+      <div class="code-grid cols-1">
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+df = pd.read_csv("streamly_churn.csv")</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
+      </div>
     </section>
 
     <!-- 6 · LIST — Etapa 3 features -->
@@ -548,7 +719,40 @@ auc_3 = roc_auc_score(
         <li><span class="n">3</span><span><code>customer_activity</code> — combinación de <code>devices_used</code> y <code>unique_content_last_30d</code></span></li>
         <li><span class="n">4</span><span><code>support_intensity</code> = <code>support_tickets</code> + <code>complaints</code></span></li>
       </ol>
-      <p class="sub">💀 Y ahora hay 4 notebooks distintos — nadie recuerda cuál tiene el <code>engagement_score</code> corregido.</p>
+      <p class="sub">Cada vez que se agrega una feature nueva, hay que volver a correr las 15 celdas para los 4 modelos.</p>
+    </section>
+
+    <!-- RERUN — flujo completo (nuevo cálculo de variables) -->
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por un nuevo cálculo de variables">
+      <p class="eyebrow">Otra vez — por un nuevo cálculo de variables</p>
+      <h2>Para saber esto, hay que correr todo de nuevo</h2>
+      <div class="code-grid cols-1">
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+df = pd.read_csv("streamly_churn.csv")</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
+      </div>
+    </section>
+
+    <!-- 6b · TREE — Etapa 3 el caos -->
+    <section class="slide slide--tree" data-label="Etapa 3 — el caos">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2>churn_prediction_final_v3_de_verdad.ipynb</h2>
+      <div class="tree-panel">churn_prediction.ipynb
+churn_prediction_final.ipynb
+churn_prediction_final_v2.ipynb
+churn_prediction_final_v3_de_verdad.ipynb</div>
+      <p class="sub">💀 Nadie recuerda cuál de los cuatro tiene el <code style="font-family:var(--font-mono); background:transparent;">engagement_score</code> corregido.</p>
     </section>
 
     <!-- 7 · TREE — Etapa 3 nace src/ -->
@@ -592,6 +796,28 @@ hyperparameters:
       <p class="sub">Ya no estamos entrenando un modelo. Estamos gestionando experimentos.</p>
     </section>
 
+    <!-- RERUN — flujo completo (nuevo experimento) -->
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por un nuevo experimento">
+      <p class="eyebrow">Otra vez — por un nuevo experimento</p>
+      <h2>Para saber esto, hay que correr todo de nuevo</h2>
+      <div class="code-grid cols-1">
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+df = pd.read_csv("streamly_churn.csv")</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
+      </div>
+    </section>
+
     <!-- 10 · LIST — Etapa 5 completa -->
     <section class="slide slide--paper slide--list" data-label="Etapa 5 — Reproducibilidad">
       <p class="eyebrow">Etapa 5 · Reproducibilidad — en el standup...</p>
@@ -603,7 +829,13 @@ hyperparameters:
         <li><span class="n">4</span><span>qué <code>random_state</code></span></li>
         <li><span class="n">5</span><span>qué preprocesamiento tenía el notebook en ese momento</span></li>
       </ol>
-      <p class="sub">La solución no es acordarse mejor — es dejar de depender de la memoria.</p>
+    </section>
+
+    <!-- 10b · STATEMENT — Etapa 5 la respuesta -->
+    <section class="slide slide--statement" data-label="Etapa 5 — la respuesta">
+      <p class="eyebrow">Etapa 5 · Reproducibilidad</p>
+      <h2>La solución no es acordarse mejor.</h2>
+      <p class="sub">Es dejar de depender de la memoria: cada experimento queda registrado, con su configuración, su seed y un identificador único — no solo ejecutado.</p>
     </section>
 
     <!-- 11 · TREE — Etapa 6 árbol completo -->
@@ -677,6 +909,7 @@ hyperparameters:
     var deck = document.getElementById('deck');
     var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
     var dotsEl = document.getElementById('dots');
+    var chromeTopEl = document.getElementById('chromeTop');
     var counterEl = document.getElementById('counter');
     var prevBtn = document.getElementById('prevBtn');
     var nextBtn = document.getElementById('nextBtn');
@@ -695,6 +928,7 @@ hyperparameters:
       var slideWidth = appEl.clientWidth;
       deck.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
       counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      chromeTopEl.classList.toggle('chrome-top--minimal', !!slides[current].querySelector('.brand-mark'));
       Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
         dot.setAttribute('aria-current', i === current ? 'true' : 'false');
       });
@@ -709,9 +943,138 @@ hyperparameters:
       }
     }
 
+    var PY_KEYWORDS = /\b(import|from|as|def|return|if|elif|else|for|while|in|is|not|and|or|class|try|except|finally|with|lambda|pass|break|continue|yield|True|False|None|self)\b/;
+    var HL_PATTERN = new RegExp(
+      '(#.*$)' +
+      '|("""[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'|"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\')' +
+      '|(\\b\\d+\\.?\\d*\\b)' +
+      '|' + PY_KEYWORDS.source,
+      'gm'
+    );
+    function escHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function highlightCode(code) {
+      var out = '';
+      var last = 0;
+      var m;
+      HL_PATTERN.lastIndex = 0;
+      while ((m = HL_PATTERN.exec(code))) {
+        if (m.index > last) out += escHtml(code.slice(last, m.index));
+        if (m[1] !== undefined) out += '<span class="cmt">' + escHtml(m[1]) + '</span>';
+        else if (m[2] !== undefined) out += '<span class="str">' + escHtml(m[2]) + '</span>';
+        else if (m[3] !== undefined) out += '<span class="num">' + escHtml(m[3]) + '</span>';
+        else out += '<span class="kw">' + escHtml(m[0]) + '</span>';
+        last = HL_PATTERN.lastIndex;
+      }
+      out += escHtml(code.slice(last));
+      return out;
+    }
+
+    function ensureNbCache(cell) {
+      var codeEl = cell.querySelector('.nb-code');
+      var promptEl = cell.querySelector('.nb-prompt');
+      if (!codeEl._nbReady) {
+        codeEl._nbText = codeEl.textContent;
+        codeEl._nbHtml = highlightCode(codeEl._nbText);
+        promptEl._nbPrompt = promptEl.textContent;
+        codeEl._nbReady = true;
+      }
+      return { codeEl: codeEl, promptEl: promptEl };
+    }
+
+    function settleCell(cell) {
+      var c = ensureNbCache(cell);
+      c.codeEl.innerHTML = c.codeEl._nbHtml;
+      c.promptEl.textContent = c.promptEl._nbPrompt;
+      c.promptEl.classList.remove('is-running');
+    }
+
+    function hideOutput(cell) {
+      var outEl = cell.querySelector('.nb-output');
+      if (outEl) outEl.classList.add('is-pending');
+    }
+
+    function showOutput(cell) {
+      var outEl = cell.querySelector('.nb-output');
+      if (outEl) outEl.classList.remove('is-pending');
+    }
+
+    function followCellScroll(cell) {
+      var grid = cell.closest('.code-grid');
+      if (!grid) return;
+      var cellRect = cell.getBoundingClientRect();
+      var gridRect = grid.getBoundingClientRect();
+      if (cellRect.bottom > gridRect.bottom) {
+        grid.scrollTop += (cellRect.bottom - gridRect.bottom) + 12;
+      } else if (cellRect.top < gridRect.top) {
+        grid.scrollTop -= (gridRect.top - cellRect.top) + 12;
+      }
+    }
+
+    function typeCell(cell, token, onDone) {
+      var c = ensureNbCache(cell);
+      var codeEl = c.codeEl, promptEl = c.promptEl;
+      var text = codeEl._nbText;
+      promptEl.textContent = 'In [*]:';
+      promptEl.classList.add('is-running');
+      codeEl.textContent = '';
+      hideOutput(cell);
+      followCellScroll(cell);
+
+      var i = 0;
+      var chunk = Math.max(1, Math.round(text.length / 90));
+
+      function tick() {
+        if (token.cancelled) return;
+        if (i >= text.length) {
+          settleCell(cell);
+          followCellScroll(cell);
+          setTimeout(function () {
+            if (token.cancelled) return;
+            showOutput(cell);
+            followCellScroll(cell);
+            if (onDone) onDone();
+          }, 220);
+          return;
+        }
+        i = Math.min(text.length, i + chunk);
+        codeEl.textContent = text.slice(0, i) + '▌';
+        followCellScroll(cell);
+        setTimeout(tick, 16);
+      }
+      tick();
+    }
+
+    var nbToken = null;
+    function playNotebookCells(slideEl) {
+      var cells = Array.prototype.slice.call(slideEl.querySelectorAll('.notebook-cell'));
+      if (!cells.length) return;
+      if (nbToken) { nbToken.cancelled = true; }
+      var token = { cancelled: false };
+      nbToken = token;
+
+      cells.forEach(function (cell) {
+        var c = ensureNbCache(cell);
+        c.codeEl.textContent = '';
+        hideOutput(cell);
+      });
+
+      var idx = 0;
+      function next() {
+        if (token.cancelled || idx >= cells.length) return;
+        var cell = cells[idx++];
+        typeCell(cell, token, function () {
+          if (!token.cancelled) { setTimeout(next, 250); }
+        });
+      }
+      next();
+    }
+
     function go(i) {
       current = Math.max(0, Math.min(slides.length - 1, i));
       render();
+      playNotebookCells(slides[current]);
     }
 
     prevBtn.addEventListener('click', function () { go(current - 1); });
@@ -759,6 +1122,11 @@ hyperparameters:
 
     window.addEventListener('resize', render);
 
+    Array.prototype.forEach.call(document.querySelectorAll('.code-panel'), function (el) {
+      el.innerHTML = highlightCode(el.textContent);
+    });
+
     render();
+    playNotebookCells(slides[current]);
   })();
 </script>
