@@ -543,7 +543,7 @@
 <div class="app">
   <div class="chrome-top" id="chromeTop">
     <span class="chrome-title">Más allá del notebook · PyDay Boyacá 2026</span>
-    <span class="counter" id="counter">1 / 25</span>
+    <span class="counter" id="counter">1 / 24</span>
   </div>
 
   <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
@@ -579,35 +579,21 @@
       <p class="eyebrow">Etapa 1 · data → preprocessing → model → evaluation</p>
       <h2>churn_prediction.ipynb</h2>
       <div class="code-grid cols-1">
-        <div class="notebook-cell">
-          <div class="nb-input">
-            <span class="nb-prompt">In&nbsp;[1]:</span>
-            <pre class="nb-code"><span class="cmt"># cleaning</span>
-df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre>
-          </div>
-        </div>
-        <div class="notebook-cell">
-          <div class="nb-input">
-            <span class="nb-prompt">In&nbsp;[2]:</span>
-            <pre class="nb-code"><span class="cmt"># feature engineering</span>
-df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre>
-          </div>
-        </div>
-        <div class="notebook-cell">
-          <div class="nb-input">
-            <span class="nb-prompt">In&nbsp;[3]:</span>
-            <pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+df = pd.read_csv("streamly_churn.csv")</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
+df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
-)
-
-modelo = <span class="kw">LogisticRegression</span>(max_iter=1000)
-modelo.fit(X_train, y_train)</pre>
-          </div>
-          <div class="nb-output">
-            <span class="nb-out-prompt">Out[3]:</span>
-            <pre class="nb-out-content">LogisticRegression(max_iter=1000)</pre>
-          </div>
-        </div>
+)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo = <span class="kw">LogisticRegression</span>(max_iter=1000)
+modelo.fit(X_train, y_train)</pre></div></div>
+        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
       </div>
       <p class="sub">Todo funciona. 15 celdas, cada una hace una cosa — esto no tiene nada de malo.</p>
     </section>
@@ -625,29 +611,29 @@ modelo.fit(X_train, y_train)</pre>
       <p class="eyebrow">Etapa 2 · Logistic Regression, Random Forest, XGBoost, LightGBM</p>
       <h2>Copiar, pegar, cambiar una línea</h2>
       <div class="code-grid cols-1">
-        <div><div class="code-caption">Modelo 1</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code">modelo_1 = <span class="kw">LogisticRegression</span>(
+        <div><div class="code-caption">Modelo 1</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[8]:</span><pre class="nb-code">modelo_1 = <span class="kw">LogisticRegression</span>(
     max_iter=1000
 )
 modelo_1.fit(X_train, y_train)
 roc_auc_score(
     y_test,
     modelo_1.predict_proba(X_test)[:, 1]
-)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[4]:</span><pre class="nb-out-content">0.831</pre></div></div></div>
-        <div><div class="code-caption">Modelo 2</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">modelo_2 = <span class="kw">RandomForestClassifier</span>(
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[8]:</span><pre class="nb-out-content">0.831</pre></div></div></div>
+        <div><div class="code-caption">Modelo 2</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[9]:</span><pre class="nb-code">modelo_2 = <span class="kw">RandomForestClassifier</span>(
     n_estimators=300
 )
 modelo_2.fit(X_train, y_train)
 roc_auc_score(
     y_test,
     modelo_2.predict_proba(X_test)[:, 1]
-)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[5]:</span><pre class="nb-out-content">0.876</pre></div></div></div>
-        <div><div class="code-caption">Modelo 3</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo_3 = <span class="kw">XGBClassifier</span>()
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[9]:</span><pre class="nb-out-content">0.876</pre></div></div></div>
+        <div><div class="code-caption">Modelo 3</div><div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[10]:</span><pre class="nb-code">modelo_3 = <span class="kw">XGBClassifier</span>()
 
 modelo_3.fit(X_train, y_train)
 roc_auc_score(
     y_test,
     modelo_3.predict_proba(X_test)[:, 1]
-)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[6]:</span><pre class="nb-out-content">0.904</pre></div></div></div>
+)</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[10]:</span><pre class="nb-out-content">0.904</pre></div></div></div>
       </div>
     </section>
 
@@ -656,28 +642,6 @@ roc_auc_score(
       <p class="eyebrow">Etapa 2 · Experimentación</p>
       <h2>¿Dónde ponemos el código que todos estos modelos comparten?</h2>
       <p class="sub">Ya se repitió tres veces el mismo <code style="font-family:var(--font-mono); background:transparent;">.fit()</code> y el mismo cálculo de métrica.</p>
-    </section>
-
-    <!-- RERUN — flujo completo (modelo nuevo) -->
-    <section class="slide slide--paper slide--code" data-label="Otra vez — por un modelo nuevo">
-      <p class="eyebrow">Otra vez — por un modelo nuevo</p>
-      <h2>Para saber esto, hay que correr todo de nuevo</h2>
-      <div class="code-grid cols-1">
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
-import pandas as pd
-from sklearn.model_selection import train_test_split</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
-df = pd.read_csv("streamly_churn.csv")</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
-df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
-df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
-      </div>
     </section>
 
     <!-- 5c · STATEMENT — Etapa 3 transición -->
