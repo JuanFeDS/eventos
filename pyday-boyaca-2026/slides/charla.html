@@ -318,6 +318,7 @@
     font-size: clamp(12.5px, 1.25vw, 16px);
     line-height: 1.7;
   }
+  .notebook-cell.nb-fixed { opacity: 0.5; }
   .notebook-cell .nb-input { display: flex; align-items: stretch; }
   .notebook-cell .nb-prompt {
     flex: none;
@@ -467,6 +468,51 @@
   }
   .tree-panel .dim { color: var(--cream-soft); }
   .tree-panel .hi { color: var(--gold); }
+
+  .explorer {
+    font-family: var(--font-mono);
+    font-size: clamp(13.5px, 1.3vw, 16.5px);
+    background: var(--ink);
+    border: 1px solid rgba(247, 245, 232, 0.08);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+    border-radius: 10px;
+    padding: clamp(10px, 1.6vh, 18px) clamp(18px, 2.2vw, 26px);
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: clamp(20px, 3.4vh, 36px);
+  }
+  .explorer .exp-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 8px 3px calc(var(--depth, 0) * 22px);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .explorer .exp-chev {
+    color: var(--cream-soft);
+    font-size: 0.6em;
+    width: 10px;
+    flex: none;
+    display: inline-block;
+  }
+  .explorer .exp-icon {
+    flex: none;
+    font-size: 0.95em;
+    line-height: 1;
+  }
+  .explorer .exp-folder { color: var(--cream); font-weight: 600; }
+  .explorer .exp-file { color: var(--cream-soft); font-weight: 400; }
+  .explorer .exp-file.exp-hi { color: var(--gold); font-weight: 600; }
+  .explorer .exp-comment {
+    color: var(--cream-soft);
+    opacity: 0.65;
+    font-size: 0.8em;
+    font-style: italic;
+    margin-left: 4px;
+  }
+
   .slide--tree .sub {
     font-family: var(--font-body);
     font-size: clamp(14px, 1.5vw, 18px);
@@ -478,13 +524,20 @@
   /* ---------- list ---------- */
 
   .slide--list { justify-content: flex-start; }
-  .slide--list h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(24px, 4vh, 40px); }
-  .num-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 20px); max-width: 62ch; }
-  .num-list li { display: flex; gap: 16px; align-items: flex-start; font-size: clamp(16px, 1.7vw, 21px); line-height: 1.5; }
+  .slide--list h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(16px, 2.4vh, 24px); }
+  .list-rule {
+    width: clamp(56px, 7vw, 96px);
+    height: 4px;
+    border-radius: 2px;
+    background: var(--gold);
+    margin-bottom: clamp(28px, 4.6vh, 48px);
+  }
+  .num-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.4vh, 24px); max-width: 64ch; }
+  .num-list li { display: flex; gap: 16px; align-items: flex-start; font-size: clamp(16.5px, 1.8vw, 22px); line-height: 1.45; }
   .num-list .n {
     flex: none;
-    width: clamp(28px, 2.6vw, 34px);
-    height: clamp(28px, 2.6vw, 34px);
+    width: clamp(28px, 2.8vw, 36px);
+    height: clamp(28px, 2.8vw, 36px);
     border-radius: 50%;
     background: var(--gold);
     color: var(--ink);
@@ -532,7 +585,7 @@
     .code-panel { font-size: 12.5px; }
     .notebook-cell { font-size: 12.5px; }
     .notebook-cell .nb-code { padding: 14px 16px 14px 10px; }
-    .num-list li { font-size: 16.5px; }
+    .num-list li { font-size: 17px; }
     .tree-panel { font-size: 13px; }
     .note-card p { font-size: 15.5px; }
   }
@@ -543,7 +596,7 @@
 <div class="app">
   <div class="chrome-top" id="chromeTop">
     <span class="chrome-title">Más allá del notebook · PyDay Boyacá 2026</span>
-    <span class="counter" id="counter">1 / 24</span>
+    <span class="counter" id="counter">1 / 42</span>
   </div>
 
   <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
@@ -652,16 +705,16 @@ roc_auc_score(
     </section>
 
     <!-- RERUN — flujo completo (variable nueva) -->
-    <section class="slide slide--paper slide--code" data-label="Otra vez — por una variable nueva">
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por una variable nueva" data-rerun-index="1">
       <p class="eyebrow">Otra vez — por una variable nueva</p>
       <h2>Para saber esto, hay que correr todo de nuevo</h2>
       <div class="code-grid cols-1">
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
 import pandas as pd
 from sklearn.model_selection import train_test_split</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
 df = pd.read_csv("streamly_churn.csv")</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
 df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
         <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
 df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
@@ -673,10 +726,18 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
       </div>
     </section>
 
+    <!-- 5d · STATEMENT — Etapa 3 no es la única variable -->
+    <section class="slide slide--statement" data-label="Etapa 3 — no se detienen ahí">
+      <p class="eyebrow">Etapa 3 · Feature engineering</p>
+      <h2>Y no se detienen en una sola variable</h2>
+      <p class="sub">Alguien se da cuenta de que combinando columnas se puede describir mejor a un cliente de Streamly.</p>
+    </section>
+
     <!-- 6 · LIST — Etapa 3 features -->
     <section class="slide slide--paper slide--list" data-label="Etapa 3 — Feature engineering">
       <p class="eyebrow">Etapa 3 · Feature engineering</p>
       <h2>Combinando columnas de Streamly</h2>
+      <div class="list-rule"></div>
       <ol class="num-list">
         <li><span class="n">1</span><span><code>engagement_score</code> = <code>sessions_last_30d</code> × <code>completion_rate</code></span></li>
         <li><span class="n">2</span><span><code>payment_risk</code> — función de <code>failed_payments</code> y <code>payment_method</code></span></li>
@@ -687,16 +748,16 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
     </section>
 
     <!-- RERUN — flujo completo (nuevo cálculo de variables) -->
-    <section class="slide slide--paper slide--code" data-label="Otra vez — por un nuevo cálculo de variables">
+    <section class="slide slide--paper slide--code" data-label="Otra vez — por un nuevo cálculo de variables" data-rerun-index="2">
       <p class="eyebrow">Otra vez — por un nuevo cálculo de variables</p>
       <h2>Para saber esto, hay que correr todo de nuevo</h2>
       <div class="code-grid cols-1">
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
 import pandas as pd
 from sklearn.model_selection import train_test_split</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
 df = pd.read_csv("streamly_churn.csv")</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
+        <div class="notebook-cell nb-fixed"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
 df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
         <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
 df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
@@ -708,10 +769,36 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
       </div>
     </section>
 
-    <!-- 6b · TREE — Etapa 3 el caos -->
-    <section class="slide slide--tree" data-label="Etapa 3 — el caos">
+    <!-- 6a1 · LIST — Etapa 3 formas sucias -->
+    <section class="slide slide--paper slide--list" data-label="Etapa 3 — formas sucias">
       <p class="eyebrow">Etapa 3 · El caos</p>
-      <h2>churn_prediction_final_v3_de_verdad.ipynb</h2>
+      <h2>Hay varias formas de resolver esto — casi todas sucias</h2>
+      <div class="list-rule"></div>
+      <ol class="num-list">
+        <li><span class="n">1</span><span>Sobrescribir las celdas del mismo notebook para cada cambio</span></li>
+        <li><span class="n">2</span><span>Copiar y pegar el código de cada experimento debajo del anterior</span></li>
+        <li><span class="n">3</span><span>Crear un notebook nuevo por cada experimento</span></li>
+      </ol>
+    </section>
+
+    <!-- 6a2 · STATEMENT — sobrescribir es lo peor -->
+    <section class="slide slide--statement" data-label="Etapa 3 — sobrescribir es lo peor">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2>Sobrescribir es la peor de las tres</h2>
+      <p class="sub">En ciencia de datos está permitido cometer errores. Pero es imperdonable no documentarlos — te puede obligar a repetir trabajo que ya hiciste, o a perder la traza de lo que corriste.</p>
+    </section>
+
+    <!-- 6a3 · STATEMENT — copiar y pegar tampoco escala -->
+    <section class="slide slide--statement" data-label="Etapa 3 — copiar y pegar">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2>Copiar y pegar tampoco escala</h2>
+      <p class="sub">El notebook se vuelve gigantesco — y si el kernel se cae, reejecutarlo todo sale carísimo.</p>
+    </section>
+
+    <!-- 6b · TREE — Etapa 3 el caos -->
+    <section class="slide slide--statement" data-label="Etapa 3 — el caos">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2 style="font-size: clamp(20px, 2.8vw, 34px); max-width: 90%;">churn_prediction_final_v3_de_verdad.ipynb</h2>
       <div class="tree-panel">churn_prediction.ipynb
 churn_prediction_final.ipynb
 churn_prediction_final_v2.ipynb
@@ -719,27 +806,161 @@ churn_prediction_final_v3_de_verdad.ipynb</div>
       <p class="sub">💀 Nadie recuerda cuál de los cuatro tiene el <code style="font-family:var(--font-mono); background:transparent;">engagement_score</code> corregido.</p>
     </section>
 
+    <!-- 6c · STATEMENT — decisión de arquitectura -->
+    <section class="slide slide--statement" data-label="Etapa 3 — la decisión">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2>Aquí nace la primera decisión de arquitectura real</h2>
+      <p class="sub">Sacar el código del notebook.</p>
+    </section>
+
+    <!-- 6d · STATEMENT — cómo se organiza -->
+    <section class="slide slide--statement" data-label="Etapa 3 — cómo se organiza">
+      <p class="eyebrow">Etapa 3 · El caos</p>
+      <h2>¿Cómo se organiza ese código?</h2>
+      <p class="sub">Por responsabilidad: cada carpeta hace una sola cosa.</p>
+    </section>
+
     <!-- 7 · TREE — Etapa 3 nace src/ -->
     <section class="slide slide--tree" data-label="Etapa 3 — nace src/">
       <p class="eyebrow">Etapa 3 · Nace src/</p>
       <h2>src/</h2>
-      <div class="tree-panel">├── data/          <span class="dim"># cargar y limpiar streamly_churn.csv</span>
-├── features/      <span class="dim"># engagement_score, payment_risk...</span>
-├── models/        <span class="dim"># una función de entrenamiento por modelo</span>
-├── evaluation/    <span class="dim"># roc_auc, matriz de confusión...</span>
-└── utils/</div>
+      <div class="explorer">
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>data<span class="exp-comment"># cargar y limpiar streamly_churn.csv</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>features<span class="exp-comment"># engagement_score, payment_risk...</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>models<span class="exp-comment"># una función de entrenamiento por modelo</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>evaluation<span class="exp-comment"># roc_auc, matriz de confusión...</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>utils</div>
+      </div>
       <p class="sub">El notebook deja de ser el lugar donde vive el código. Pasa a ser el lugar donde se usa el código.</p>
+    </section>
+
+    <!-- 6e1 · TREE — dentro de data/ -->
+    <section class="slide slide--tree" data-label="Etapa 3 — dentro de data/">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>data/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>raw</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>streamly_churn.csv</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>processed</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>streamly_churn_clean.parquet</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>streamly_churn_features.parquet</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>data_dictionary.md</div>
+      </div>
+      <p class="sub">El dataset crudo, su versión limpia, y hasta el diccionario de columnas — separados.</p>
+    </section>
+
+    <!-- 6e2 · TREE — dentro de notebooks/ -->
+    <section class="slide slide--tree" data-label="Etapa 3 — dentro de notebooks/">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>notebooks/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>exploracion.ipynb</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>comparacion_modelos.ipynb</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>feature_ideas.ipynb</div>
+      </div>
+      <p class="sub">Notebooks de exploración — ninguno es el pipeline de producción.</p>
+    </section>
+
+    <!-- 6e3 · TREE — dentro de src/ -->
+    <section class="slide slide--tree" data-label="Etapa 3 — dentro de src/">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>src/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>data</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">🐍</span>loader.py</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>features</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">🐍</span>engineering.py</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>models</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">🐍</span>training.py</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>evaluation</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">🐍</span>metrics.py</div>
+      </div>
+      <p class="sub">Cuatro responsabilidades, cuatro carpetas — cada una con una función clara.</p>
+    </section>
+
+    <!-- 7a1 · CODE — src/features -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 3 — src/features">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>src/features/engineering.py</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel">def compute_engagement_score(df):
+    df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]
+    return df</div>
+      </div>
+      <p class="sub">Ya no es una línea suelta en el notebook — es una función que cualquier modelo puede reutilizar.</p>
+    </section>
+
+    <!-- 7a2 · CODE — src/models -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 3 — src/models">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>src/models/training.py</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel">MODELOS = {
+    "logistic_regression": LogisticRegression,
+    "random_forest": RandomForestClassifier,
+    "xgboost": XGBClassifier,
+}
+
+def entrenar_modelo(nombre, X_train, y_train):
+    modelo = MODELOS[nombre]()
+    modelo.fit(X_train, y_train)
+    return modelo</div>
+      </div>
+      <p class="sub">Esta es la respuesta a la pregunta de la Etapa 2: el código que compartían los 3 modelos ahora vive en un solo lugar.</p>
+    </section>
+
+    <!-- 7a2b · CODE — train.py -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 3 — train.py">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>train.py</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel">from src.features import engineering
+from src.models import training
+
+df = load_data()
+df = engineering.compute_engagement_score(df)
+modelo = training.entrenar_modelo("xgboost", X_train, y_train)</div>
+      </div>
+      <p class="sub">El notebook ya no ejecuta nada. <code style="font-family:var(--font-mono); background:transparent;">train.py</code> es el nuevo punto de entrada — junta las piezas de src/.</p>
+    </section>
+
+    <!-- 7a3 · TREE — dentro de tests/ -->
+    <section class="slide slide--tree" data-label="Etapa 3 — dentro de tests/">
+      <p class="eyebrow">Etapa 3 · Nace src/</p>
+      <h2>tests/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>test_data.py</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>test_features.py</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>test_models.py</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>test_evaluation.py</div>
+      </div>
+      <p class="sub">Una prueba por módulo — el código de src/ ya no depende de que "funcionó en mi notebook".</p>
+    </section>
+
+    <!-- 7b · STATEMENT — transición a Etapa 4 -->
+    <section class="slide slide--statement" data-label="Etapa 4 — transición">
+      <p class="eyebrow">Etapa 4 · Experimentación</p>
+      <h2>Ahora que el código vive en src/, probar variantes es más fácil</h2>
+      <p class="sub">El equipo empieza a preguntarse qué combinación de features, modelo e hiperparámetros funciona mejor.</p>
     </section>
 
     <!-- 8 · LIST — Etapa 4 variantes -->
     <section class="slide slide--paper slide--list" data-label="Etapa 4 — Experimentación">
       <p class="eyebrow">Etapa 4 · Experimentación</p>
       <h2>¿Qué combinación funciona mejor?</h2>
+      <div class="list-rule"></div>
       <ol class="num-list">
         <li><span class="n">1</span><span>Con <code>engagement_score</code> y sin él</span></li>
         <li><span class="n">2</span><span>XGBoost con <code>max_depth=4</code> vs <code>max_depth=8</code></span></li>
         <li><span class="n">3</span><span>Con o sin <code>payment_risk</code></span></li>
       </ol>
+    </section>
+
+    <!-- 8b · STATEMENT — callback al caos -->
+    <section class="slide slide--statement" data-label="Etapa 4 — callback">
+      <p class="eyebrow">Etapa 4 · Experimentación</p>
+      <h2>¿Vas a duplicar train.py por cada combinación?</h2>
+      <p class="sub">Editarlo a mano, o duplicarlo por variante, tampoco escala. Tiene que haber otra forma.</p>
     </section>
 
     <!-- 9 · CODE — Etapa 4 yaml -->
@@ -760,32 +981,30 @@ hyperparameters:
       <p class="sub">Ya no estamos entrenando un modelo. Estamos gestionando experimentos.</p>
     </section>
 
-    <!-- RERUN — flujo completo (nuevo experimento) -->
-    <section class="slide slide--paper slide--code" data-label="Otra vez — por un nuevo experimento">
-      <p class="eyebrow">Otra vez — por un nuevo experimento</p>
-      <h2>Para saber esto, hay que correr todo de nuevo</h2>
-      <div class="code-grid cols-1">
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[1]:</span><pre class="nb-code"><span class="cmt"># librerías</span>
-import pandas as pd
-from sklearn.model_selection import train_test_split</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[2]:</span><pre class="nb-code"><span class="cmt"># cargar datos</span>
-df = pd.read_csv("streamly_churn.csv")</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[3]:</span><pre class="nb-code"><span class="cmt"># limpieza</span>
-df = df.dropna(subset=["monthly_price", "days_since_last_login"])</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[4]:</span><pre class="nb-code"><span class="cmt"># feature engineering</span>
-df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[5]:</span><pre class="nb-code">X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[6]:</span><pre class="nb-code">modelo.fit(X_train, y_train)</pre></div></div>
-        <div class="notebook-cell"><div class="nb-input"><span class="nb-prompt">In&nbsp;[7]:</span><pre class="nb-code">roc_auc_score(y_test, modelo.predict_proba(X_test)[:, 1])</pre></div><div class="nb-output"><span class="nb-out-prompt">Out[7]:</span><pre class="nb-out-content">0.876</pre></div></div>
+    <!-- 9a · TREE — dentro de configs/ -->
+    <section class="slide slide--tree" data-label="Etapa 4 — dentro de configs/">
+      <p class="eyebrow">Etapa 4 · Experimentación</p>
+      <h2>configs/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>experimento_01.yaml</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>experimento_02.yaml</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>experimento_03.yaml</div>
       </div>
+      <p class="sub">Un yaml por experimento — nada se sobreescribe.</p>
+    </section>
+
+    <!-- 9b · STATEMENT — el pánico del standup -->
+    <section class="slide slide--statement" data-label="Etapa 5 — el pánico">
+      <p class="eyebrow">Etapa 5 · Reproducibilidad</p>
+      <h2>"Oye, ¿cómo obtuviste ese 0.91 de ROC-AUC?"</h2>
+      <p class="sub">Silencio incómodo en el standup.</p>
     </section>
 
     <!-- 10 · LIST — Etapa 5 completa -->
     <section class="slide slide--paper slide--list" data-label="Etapa 5 — Reproducibilidad">
       <p class="eyebrow">Etapa 5 · Reproducibilidad — en el standup...</p>
-      <h2>¿Cómo obtuviste ese 0.91 de ROC-AUC?</h2>
+      <h2>Ahí empieza el terror</h2>
+      <div class="list-rule"></div>
       <ol class="num-list">
         <li><span class="n">1</span><span>qué versión de <code>streamly_churn.csv</code> se usó</span></li>
         <li><span class="n">2</span><span>qué features estaban activas ese día</span></li>
@@ -799,41 +1018,70 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
     <section class="slide slide--statement" data-label="Etapa 5 — la respuesta">
       <p class="eyebrow">Etapa 5 · Reproducibilidad</p>
       <h2>La solución no es acordarse mejor.</h2>
-      <p class="sub">Es dejar de depender de la memoria: cada experimento queda registrado, con su configuración, su seed y un identificador único — no solo ejecutado.</p>
+      <p class="sub">Es dejar de depender de la memoria: cada experimento queda registrado, con su configuración, su seed y un identificador único — una herramienta como MLflow complementa ese registro, no lo reemplaza.</p>
+    </section>
+
+    <!-- 10b2 · CODE — MLflow en acción -->
+    <section class="slide slide--paper slide--code" data-label="Etapa 5 — MLflow">
+      <p class="eyebrow">Etapa 5 · Reproducibilidad</p>
+      <h2>MLflow lo hace por ti</h2>
+      <div class="code-grid cols-1">
+        <div class="code-panel">with mlflow.start_run():
+    mlflow.log_params(config)
+    mlflow.log_metric("roc_auc", 0.91)
+    mlflow.log_artifact("model.pkl")</div>
+      </div>
+      <p class="sub">Cada corrida queda registrada — con su configuración, su métrica y su modelo — sin que nadie tenga que acordarse de nada.</p>
+    </section>
+
+    <!-- 10b3 · TREE — dentro de experiments/ -->
+    <section class="slide slide--tree" data-label="Etapa 5 — dentro de experiments/">
+      <p class="eyebrow">Etapa 5 · Reproducibilidad</p>
+      <h2>experiments/</h2>
+      <div class="explorer">
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>run_2026-08-01_a3f9</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>run_2026-08-03_7c2e</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>run_2026-08-05_e91b</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>config.yaml</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>metrics.json</div>
+        <div class="exp-row exp-file" style="--depth:1"><span class="exp-chev"></span><span class="exp-icon">📄</span>model.pkl</div>
+      </div>
+      <p class="sub">Cada corrida, registrada con su configuración, sus métricas y su modelo.</p>
+    </section>
+
+    <!-- 10c · STATEMENT — transición al árbol final -->
+    <section class="slide slide--statement" data-label="Etapa 6 — transición">
+      <p class="eyebrow">Etapa 6 · El proyecto</p>
+      <h2>Después de seis fricciones reales, esto es lo que queda</h2>
+      <p class="sub">Nada de esto se decidió de un tirón — cada carpeta nació resolviendo un problema concreto que ya vivimos juntos hoy.</p>
     </section>
 
     <!-- 11 · TREE — Etapa 6 árbol completo -->
     <section class="slide slide--tree" data-label="Etapa 6 — El proyecto">
       <p class="eyebrow">Etapa 6 · El proyecto</p>
       <h2>streamly-churn/</h2>
-      <div class="tree-panel">├── data/
-├── notebooks/          <span class="dim"># exploración, ya no producción</span>
-├── src/
-│   ├── data/
-│   ├── features/
-│   ├── models/
-│   └── evaluation/
-├── configs/
-├── experiments/         <span class="dim"># resultados + config de cada corrida</span>
-├── tests/
-├── <span class="hi">train.py</span>
-├── <span class="hi">predict.py</span>
-└── README.md</div>
+      <div class="explorer">
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>data</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>notebooks<span class="exp-comment"># exploración, ya no producción</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>src</div>
+        <div class="exp-row exp-folder" style="--depth:1"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>data</div>
+        <div class="exp-row exp-folder" style="--depth:1"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>features</div>
+        <div class="exp-row exp-folder" style="--depth:1"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>models</div>
+        <div class="exp-row exp-folder" style="--depth:1"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>evaluation</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>configs</div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>experiments<span class="exp-comment"># resultados + config de cada corrida</span></div>
+        <div class="exp-row exp-folder" style="--depth:0"><span class="exp-chev">▾</span><span class="exp-icon">📁</span>tests</div>
+        <div class="exp-row exp-file exp-hi" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>train.py</div>
+        <div class="exp-row exp-file exp-hi" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">🐍</span>predict.py</div>
+        <div class="exp-row exp-file" style="--depth:0"><span class="exp-chev"></span><span class="exp-icon">📄</span>README.md</div>
+      </div>
     </section>
 
     <!-- 12 · CALLOUT — el protagonista -->
     <section class="slide slide--callout" data-label="Etapa 6 — callout">
       <p class="eyebrow">Etapa 6 · El proyecto</p>
-      <h2>El verdadero protagonista no es XGBoost.</h2>
-      <p class="sub">Son las decisiones que nos llevaron a necesitar XGBoost, MLflow y Docker — y ninguna se tomó de un tirón.</p>
-    </section>
-
-    <!-- 13 · STATEMENT — cierre -->
-    <section class="slide slide--statement" data-label="Cierre">
-      <p class="eyebrow">Cierre</p>
-      <h2>¿Tienes una carpeta con _final_v2_de_verdad.ipynb?</h2>
-      <p class="sub">No hiciste nada mal. Es la señal de que tu proyecto ya superó lo que un solo notebook puede sostener.</p>
-      <p class="sub">Nadie "se gana el derecho" a tener src/. Se gana la primera vez que alguien pregunta "¿dónde va el código compartido?" y no hay una buena respuesta.</p>
+      <h2>El verdadero protagonista no es ninguna herramienta.</h2>
+      <p class="sub">Son las decisiones que nos llevaron a necesitarlas — y ninguna se tomó de un tirón.</p>
     </section>
 
     <!-- 14 · CALLOUT — mensaje final -->
@@ -976,7 +1224,12 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
       }
     }
 
-    function typeCell(cell, token, onDone) {
+    function rerunSpeedFactor(slideEl) {
+      var idx = parseInt(slideEl.getAttribute('data-rerun-index') || '0', 10);
+      return Math.max(0.15, 1 - idx * 0.3);
+    }
+
+    function typeCell(cell, token, onDone, speed) {
       var c = ensureNbCache(cell);
       var codeEl = c.codeEl, promptEl = c.promptEl;
       var text = codeEl._nbText;
@@ -987,7 +1240,9 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
       followCellScroll(cell);
 
       var i = 0;
-      var chunk = Math.max(1, Math.round(text.length / 90));
+      var chunk = Math.max(1, Math.round(text.length / 60));
+      var tickDelay = Math.max(4, Math.round(12 * speed));
+      var settleDelay = Math.max(50, Math.round(150 * speed));
 
       function tick() {
         if (token.cancelled) return;
@@ -999,24 +1254,37 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
             showOutput(cell);
             followCellScroll(cell);
             if (onDone) onDone();
-          }, 220);
+          }, settleDelay);
           return;
         }
         i = Math.min(text.length, i + chunk);
         codeEl.textContent = text.slice(0, i) + '▌';
         followCellScroll(cell);
-        setTimeout(tick, 16);
+        setTimeout(tick, tickDelay);
       }
       tick();
     }
 
     var nbToken = null;
     function playNotebookCells(slideEl) {
-      var cells = Array.prototype.slice.call(slideEl.querySelectorAll('.notebook-cell'));
-      if (!cells.length) return;
+      var allCells = Array.prototype.slice.call(slideEl.querySelectorAll('.notebook-cell'));
+      if (!allCells.length) return;
       if (nbToken) { nbToken.cancelled = true; }
       var token = { cancelled: false };
       nbToken = token;
+      var speed = rerunSpeedFactor(slideEl);
+
+      var cells = [];
+      allCells.forEach(function (cell) {
+        if (cell.classList.contains('nb-fixed')) {
+          var c = ensureNbCache(cell);
+          c.codeEl.innerHTML = c.codeEl._nbHtml;
+          c.promptEl.textContent = c.promptEl._nbPrompt;
+          showOutput(cell);
+        } else {
+          cells.push(cell);
+        }
+      });
 
       cells.forEach(function (cell) {
         var c = ensureNbCache(cell);
@@ -1025,12 +1293,13 @@ df["engagement_score"] = df["sessions_last_30d"] * df["completion_rate"]</pre></
       });
 
       var idx = 0;
+      var gapDelay = Math.max(50, Math.round(150 * speed));
       function next() {
         if (token.cancelled || idx >= cells.length) return;
         var cell = cells[idx++];
         typeCell(cell, token, function () {
-          if (!token.cancelled) { setTimeout(next, 250); }
-        });
+          if (!token.cancelled) { setTimeout(next, gapDelay); }
+        }, speed);
       }
       next();
     }
