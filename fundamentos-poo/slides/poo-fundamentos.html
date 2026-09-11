@@ -1,0 +1,689 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentos de POO</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg:       #07070F;
+    --surface:  #0F0F1A;
+    --surface-2:#16162A;
+    --border:   #1E1E35;
+    --text:     #E8E8F0;
+    --text-muted: #7878A0;
+    --purple: #8B5CF6;
+    --teal:   #14B8A6;
+    --blue:   #3B82F6;
+    --pink:   #F472B6;
+
+    --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- chrome ---------- */
+
+  .app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chrome-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(14px, 2.4vh, 26px) clamp(20px, 4vw, 56px);
+    font-family: var(--font-body);
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .chrome-top .counter { font-variant-numeric: tabular-nums; }
+
+  .chrome-bottom {
+    position: absolute;
+    bottom: clamp(14px, 2.6vh, 28px);
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(232, 232, 240, 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot:hover { background: rgba(232, 232, 240, 0.4); }
+  .dot[aria-current="true"] {
+    background: var(--purple);
+    transform: scale(1.35);
+  }
+  .dot:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(232, 232, 240, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: clamp(36px, 4vw, 46px);
+    height: clamp(36px, 4vw, 46px);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-arrow:hover { background: rgba(232, 232, 240, 0.14); border-color: var(--purple); }
+  .nav-arrow:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+  .nav-arrow--prev { left: clamp(10px, 2vw, 28px); }
+  .nav-arrow--next { right: clamp(10px, 2vw, 28px); }
+
+  /* ---------- deck mechanics ---------- */
+
+  .deck {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .slide {
+    flex: 0 0 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 11vh, 120px) clamp(24px, 8vw, 140px);
+    background: var(--surface);
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(11px, 1.15vw, 14px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 clamp(10px, 1.6vh, 18px);
+  }
+
+  h1, h2 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    margin: 0;
+    color: var(--text);
+  }
+
+  code { font-family: var(--font-mono); }
+
+  /* ---------- cover ---------- */
+
+  .slide--cover { background: var(--bg); }
+  .slide--cover h1 {
+    font-size: clamp(40px, 6.4vw, 84px);
+    font-weight: 800;
+    line-height: 1.02;
+  }
+  .slide--cover h1 .accent { color: var(--purple); }
+  .slide--cover .sub {
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--text-muted);
+    margin: clamp(10px, 1.8vh, 20px) 0 clamp(36px, 6vh, 64px);
+    max-width: 46ch;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: clamp(6px, 1vw, 10px); max-width: 62ch; }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: clamp(12px, 1.05vw, 14px);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ---------- divider ---------- */
+
+  .slide--divider { background: var(--bg); align-items: flex-start; }
+  .slide--divider .num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(80px, 13vw, 180px);
+    color: var(--purple);
+    line-height: 1;
+    margin: 0 0 clamp(6px, 1.2vh, 14px);
+  }
+  .slide--divider h2 {
+    font-size: clamp(32px, 4.8vw, 60px);
+    font-weight: 700;
+  }
+  .slide--divider .sub {
+    color: var(--text-muted);
+    font-size: clamp(14px, 1.4vw, 18px);
+    margin-top: clamp(10px, 1.6vh, 16px);
+    max-width: 50ch;
+  }
+
+  /* ---------- concept ---------- */
+
+  .slide--concept h2 {
+    font-size: clamp(30px, 4.2vw, 54px);
+    font-weight: 700;
+    max-width: 18ch;
+  }
+  .slide--concept .sub {
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--text-muted);
+    max-width: 56ch;
+    margin-top: clamp(14px, 2.2vh, 22px);
+  }
+  .analogy {
+    margin-top: clamp(28px, 4.5vh, 44px);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--purple);
+    border-radius: 10px;
+    padding: clamp(16px, 2.4vh, 22px) clamp(20px, 2.6vw, 28px);
+    max-width: 58ch;
+    font-size: clamp(14px, 1.4vw, 18px);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .analogy .label {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 6px;
+  }
+
+  /* ---------- code ---------- */
+
+  .slide--code { background: var(--surface-2); }
+  .slide--code h2 { font-size: clamp(24px, 3.2vw, 40px); font-weight: 700; margin-bottom: clamp(8px, 1.2vh, 14px); }
+  .slide--code .sub { color: var(--text-muted); font-size: clamp(13px, 1.3vw, 17px); margin-bottom: clamp(22px, 3.4vh, 36px); max-width: 60ch; }
+
+  .code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: 68ch;
+  }
+  .code-block .tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 1.1vw, 13px);
+    color: var(--text-muted);
+  }
+  .code-block pre {
+    margin: 0;
+    padding: clamp(18px, 2.6vh, 26px) clamp(20px, 2.8vw, 30px);
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1.35vw, 17px);
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .tok-kw   { color: var(--purple); }
+  .tok-fn   { color: var(--blue); }
+  .tok-str  { color: var(--teal); }
+  .tok-com  { color: var(--text-muted); font-style: italic; }
+  .tok-num  { color: var(--pink); }
+
+  .console-out {
+    margin-top: clamp(14px, 2.2vh, 20px);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    max-width: 68ch;
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1.3vw, 16px);
+    color: var(--teal);
+    white-space: pre-line;
+  }
+
+  /* ---------- diagram ---------- */
+
+  .slide--diagram h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(30px, 5vh, 54px); }
+
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .diagram-box {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 26px;
+    font-family: var(--font-mono);
+    font-size: clamp(14px, 1.5vw, 19px);
+    color: var(--text);
+    text-align: center;
+  }
+  .diagram-box.parent { border-color: var(--purple); color: var(--purple); }
+  .diagram-arrow { color: var(--text-muted); font-size: clamp(18px, 2vw, 26px); line-height: 1; }
+  .diagram-children { display: flex; gap: clamp(24px, 4vw, 56px); }
+
+  /* ---------- callout ---------- */
+
+  .slide--callout {
+    background: var(--purple);
+    align-items: center;
+    text-align: center;
+  }
+  .slide--callout .eyebrow { color: rgba(7, 7, 15, 0.65); }
+  .slide--callout h2 {
+    color: var(--bg);
+    font-size: clamp(34px, 5.2vw, 66px);
+    font-weight: 800;
+    max-width: 18ch;
+  }
+  .slide--callout .sub {
+    color: rgba(7, 7, 15, 0.75);
+    font-size: clamp(15px, 1.6vw, 20px);
+    max-width: 46ch;
+    margin-top: clamp(14px, 2vh, 20px);
+  }
+
+  /* ---------- recap ---------- */
+
+  .slide--recap h2 { font-size: clamp(26px, 3.4vw, 42px); font-weight: 700; margin-bottom: clamp(28px, 4.5vh, 48px); }
+  .recap-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2.2vh, 20px); max-width: 56ch; }
+  .recap-list li { display: flex; align-items: flex-start; gap: 14px; font-size: clamp(16px, 1.7vw, 21px); }
+  .recap-check {
+    flex: none;
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--bg);
+  }
+
+  /* ---------- closing ---------- */
+
+  .slide--closing h2 { font-size: clamp(28px, 3.8vw, 48px); font-weight: 700; margin-bottom: clamp(14px, 2vh, 20px); }
+  .slide--closing .sub { font-size: clamp(15px, 1.6vw, 19px); color: var(--text-muted); max-width: 52ch; margin-bottom: clamp(26px, 4vh, 38px); }
+  .footnote {
+    margin-top: clamp(30px, 5vh, 48px);
+    font-size: clamp(12px, 1.1vw, 14px);
+    color: var(--text-muted);
+    max-width: 48ch;
+  }
+
+  @media (max-width: 720px) {
+    .diagram-children { flex-direction: column; align-items: center; }
+  }
+</style>
+
+<div class="app">
+  <div class="chrome-top">
+    <span>Fundamentos de POO</span>
+    <span class="counter" id="counter">1 / 21</span>
+  </div>
+
+  <button class="nav-arrow nav-arrow--prev" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <button class="nav-arrow nav-arrow--next" id="nextBtn" aria-label="Slide siguiente">›</button>
+
+  <div class="deck" id="deck">
+
+    <!-- 1 · COVER -->
+    <section class="slide slide--cover" data-label="Portada">
+      <h1>Fundamentos de<br><span class="accent">Programación Orientada a Objetos.</span></h1>
+      <p class="sub">Cinco ideas que vas a usar en cualquier proyecto de Python de aquí en adelante.</p>
+      <div class="tag-row">
+        <span class="tag">Clases y objetos</span>
+        <span class="tag">Atributos, métodos y self</span>
+        <span class="tag">Encapsulamiento</span>
+        <span class="tag">Herencia</span>
+        <span class="tag">Polimorfismo</span>
+      </div>
+    </section>
+
+    <!-- 2 · DIVIDER: intro -->
+    <section class="slide slide--divider" data-label="Divisor · Intro">
+      <div class="num">00</div>
+      <h2>¿Qué es la POO?</h2>
+      <p class="sub">Una forma de organizar el código alrededor de "cosas" en vez de solo pasos</p>
+    </section>
+
+    <!-- 3 · CONCEPT: intro -->
+    <section class="slide slide--concept" data-label="Concepto · Intro">
+      <p class="eyebrow">Concepto</p>
+      <h2>Agrupas datos y comportamiento en un mismo lugar.</h2>
+      <p class="sub">En vez de tener variables sueltas y funciones que las reciben una por una, defines un tipo propio que ya sabe qué datos tiene y qué puede hacer con ellos.</p>
+      <div class="analogy">
+        <span class="label">Analogía</span>
+        Piensa en una impresora 3D: no manejas cables y motores por separado — le mandas un archivo y ella sabe cómo moverse. Un objeto funciona igual: le pides algo y él sabe cómo hacerlo con sus propios datos.
+      </div>
+    </section>
+
+    <!-- 4 · DIVIDER: clases y objetos -->
+    <section class="slide slide--divider" data-label="Divisor · Clases y objetos">
+      <div class="num">01</div>
+      <h2>Clases y objetos</h2>
+      <p class="sub">El molde y lo que sale de él</p>
+    </section>
+
+    <!-- 5 · CONCEPT: clases y objetos -->
+    <section class="slide slide--concept" data-label="Concepto · Clases y objetos">
+      <p class="eyebrow">Concepto</p>
+      <h2>Una clase es un molde. Un objeto es una instancia de ese molde.</h2>
+      <p class="sub">Defines la clase una sola vez. Cada objeto que creas a partir de ella tiene la misma estructura, pero sus propios valores.</p>
+      <div class="analogy">
+        <span class="label">Analogía</span>
+        Un molde de galletas es la clase. Cada galleta horneada es un objeto — misma forma, pero cada una es su propia galleta.
+      </div>
+    </section>
+
+    <!-- 6 · CODE: clases y objetos -->
+    <section class="slide slide--code" data-label="Código · Clases y objetos">
+      <p class="eyebrow" style="color: var(--purple);">Código</p>
+      <h2>Definir una clase e instanciarla</h2>
+      <p class="sub"><code>__init__</code> se ejecuta automáticamente cada vez que creas un objeto nuevo.</p>
+      <div class="code-block">
+        <div class="tab">persona.py</div>
+        <pre><span class="tok-kw">class</span> <span class="tok-fn">Persona</span>:
+    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+
+ana = Persona(<span class="tok-str">"Ana"</span>, <span class="tok-num">28</span>)
+print(ana.nombre, ana.edad)</pre>
+      </div>
+      <div class="console-out">Ana 28</div>
+    </section>
+
+    <!-- 7 · DIVIDER: atributos, métodos y self -->
+    <section class="slide slide--divider" data-label="Divisor · Atributos, métodos y self">
+      <div class="num">02</div>
+      <h2>Atributos, métodos y <code>self</code></h2>
+      <p class="sub">Los datos de un objeto y lo que puede hacer con ellos</p>
+    </section>
+
+    <!-- 8 · CONCEPT: atributos, métodos y self -->
+    <section class="slide slide--concept" data-label="Concepto · Atributos, métodos y self">
+      <p class="eyebrow">Concepto</p>
+      <h2>Los atributos guardan datos. Los métodos definen comportamiento.</h2>
+      <p class="sub"><code>self</code> es cómo un método se refiere "a este objeto en particular" — es lo que le permite usar los datos propios de cada instancia.</p>
+      <div class="analogy">
+        <span class="label">Analogía</span>
+        Si dos personas llenan el mismo formulario, cada una llena sus propios campos. <code>self</code> es la forma en que el método sabe de cuál formulario está hablando.
+      </div>
+    </section>
+
+    <!-- 9 · CODE: atributos, métodos y self -->
+    <section class="slide slide--code" data-label="Código · Atributos, métodos y self">
+      <p class="eyebrow" style="color: var(--purple);">Código</p>
+      <h2>Un método que usa los atributos del objeto</h2>
+      <p class="sub">Cada objeto responde con su propio nombre, porque cada uno tiene su propio <code>self</code>.</p>
+      <div class="code-block">
+        <div class="tab">persona.py</div>
+        <pre><span class="tok-kw">class</span> <span class="tok-fn">Persona</span>:
+    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+
+    <span class="tok-kw">def</span> <span class="tok-fn">saludar</span>(self):
+        print(f<span class="tok-str">"Hola, soy {self.nombre}"</span>)
+
+ana = Persona(<span class="tok-str">"Ana"</span>, <span class="tok-num">28</span>)
+ana.saludar()</pre>
+      </div>
+      <div class="console-out">Hola, soy Ana</div>
+    </section>
+
+    <!-- 10 · DIVIDER: encapsulamiento -->
+    <section class="slide slide--divider" data-label="Divisor · Encapsulamiento">
+      <div class="num">03</div>
+      <h2>Encapsulamiento</h2>
+      <p class="sub">Proteger los datos internos de un objeto</p>
+    </section>
+
+    <!-- 11 · CONCEPT: encapsulamiento -->
+    <section class="slide slide--concept" data-label="Concepto · Encapsulamiento">
+      <p class="eyebrow">Concepto</p>
+      <h2>No todo lo que tiene un objeto debería poder cambiarse desde afuera.</h2>
+      <p class="sub">En Python, el prefijo <code>_</code> es la convención para "esto es interno, no lo toques directamente" — y <code>@property</code> te deja exponer un valor de forma controlada.</p>
+      <div class="analogy">
+        <span class="label">Analogía</span>
+        Un cajero automático no te deja meter la mano a la bóveda — usas botones (métodos) que validan la operación antes de tocar el dinero de verdad.
+      </div>
+    </section>
+
+    <!-- 12 · CODE: encapsulamiento -->
+    <section class="slide slide--code" data-label="Código · Encapsulamiento">
+      <p class="eyebrow" style="color: var(--purple);">Código</p>
+      <h2>Un saldo que solo cambia por un método controlado</h2>
+      <p class="sub"><code>_saldo</code> no se edita directo — pasa siempre por <code>depositar()</code>, que puede validar antes de modificarlo.</p>
+      <div class="code-block">
+        <div class="tab">cuenta.py</div>
+        <pre><span class="tok-kw">class</span> <span class="tok-fn">CuentaBancaria</span>:
+    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self, saldo_inicial):
+        self._saldo = saldo_inicial
+
+    <span class="tok-kw">def</span> <span class="tok-fn">depositar</span>(self, monto):
+        <span class="tok-kw">if</span> monto > <span class="tok-num">0</span>:
+            self._saldo += monto
+
+cuenta = CuentaBancaria(<span class="tok-num">100</span>)
+cuenta.depositar(<span class="tok-num">50</span>)
+print(cuenta._saldo)</pre>
+      </div>
+      <div class="console-out">150</div>
+    </section>
+
+    <!-- 13 · DIVIDER: herencia -->
+    <section class="slide slide--divider" data-label="Divisor · Herencia">
+      <div class="num">04</div>
+      <h2>Herencia</h2>
+      <p class="sub">Reutilizar una clase en vez de repetirla</p>
+    </section>
+
+    <!-- 14 · DIAGRAM: herencia -->
+    <section class="slide slide--diagram" data-label="Diagrama · Herencia">
+      <p class="eyebrow">Concepto</p>
+      <h2>Una clase hija hereda de una clase padre</h2>
+      <div class="diagram">
+        <div class="diagram-box parent">Animal</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-children">
+          <div class="diagram-box">Perro</div>
+          <div class="diagram-box">Gato</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 · CODE: herencia -->
+    <section class="slide slide--code" data-label="Código · Herencia">
+      <p class="eyebrow" style="color: var(--purple);">Código</p>
+      <h2><code>Perro</code> hereda todo lo de <code>Animal</code></h2>
+      <p class="sub">No repites <code>__init__</code> — <code>Perro</code> ya lo tiene, solo agrega lo que le falta.</p>
+      <div class="code-block">
+        <div class="tab">animales.py</div>
+        <pre><span class="tok-kw">class</span> <span class="tok-fn">Animal</span>:
+    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self, nombre):
+        self.nombre = nombre
+
+<span class="tok-kw">class</span> <span class="tok-fn">Perro</span>(Animal):
+    <span class="tok-kw">def</span> <span class="tok-fn">hacer_sonido</span>(self):
+        <span class="tok-kw">return</span> <span class="tok-str">"Guau"</span>
+
+firulais = Perro(<span class="tok-str">"Firulais"</span>)
+print(firulais.nombre, firulais.hacer_sonido())</pre>
+      </div>
+      <div class="console-out">Firulais Guau</div>
+    </section>
+
+    <!-- 16 · DIVIDER: polimorfismo -->
+    <section class="slide slide--divider" data-label="Divisor · Polimorfismo">
+      <div class="num">05</div>
+      <h2>Polimorfismo</h2>
+      <p class="sub">Mismo método, comportamiento distinto</p>
+    </section>
+
+    <!-- 17 · CONCEPT: polimorfismo -->
+    <section class="slide slide--concept" data-label="Concepto · Polimorfismo">
+      <p class="eyebrow">Concepto</p>
+      <h2>Puedes tratar objetos distintos de forma idéntica.</h2>
+      <p class="sub">Si <code>Perro</code> y <code>Gato</code> heredan de <code>Animal</code> y ambos definen <code>hacer_sonido()</code>, puedes llamar ese método sin importarte de qué clase es cada uno.</p>
+      <div class="analogy">
+        <span class="label">Analogía</span>
+        Aprietas "play" en cualquier reproductor — un CD, un celular, una app — y cada uno sabe cómo reproducir a su manera. Tú solo apretaste el mismo botón.
+      </div>
+    </section>
+
+    <!-- 18 · CODE: polimorfismo -->
+    <section class="slide slide--code" data-label="Código · Polimorfismo">
+      <p class="eyebrow" style="color: var(--purple);">Código</p>
+      <h2>Un mismo bucle, dos comportamientos</h2>
+      <p class="sub">El código no pregunta qué clase es cada animal — solo llama <code>hacer_sonido()</code>.</p>
+      <div class="code-block">
+        <div class="tab">animales.py</div>
+        <pre><span class="tok-kw">class</span> <span class="tok-fn">Gato</span>(Animal):
+    <span class="tok-kw">def</span> <span class="tok-fn">hacer_sonido</span>(self):
+        <span class="tok-kw">return</span> <span class="tok-str">"Miau"</span>
+
+<span class="tok-kw">for</span> animal <span class="tok-kw">in</span> [Perro(<span class="tok-str">"Firulais"</span>), Gato(<span class="tok-str">"Michi"</span>)]:
+    print(animal.hacer_sonido())</pre>
+      </div>
+      <div class="console-out">Guau
+Miau</div>
+    </section>
+
+    <!-- 19 · CALLOUT -->
+    <section class="slide slide--callout" data-label="Callout / frase clave">
+      <p class="eyebrow">Para recordar</p>
+      <h2>Si dos clases repiten código, probablemente falta una clase padre.</h2>
+    </section>
+
+    <!-- 20 · RECAP -->
+    <section class="slide slide--recap" data-label="Resumen">
+      <p class="eyebrow">Resumen</p>
+      <h2>Lo que vimos</h2>
+      <ul class="recap-list">
+        <li><span class="recap-check">✓</span><span>Clases y objetos</span></li>
+        <li><span class="recap-check">✓</span><span>Atributos, métodos y <code>self</code></span></li>
+        <li><span class="recap-check">✓</span><span>Encapsulamiento</span></li>
+        <li><span class="recap-check">✓</span><span>Herencia</span></li>
+        <li><span class="recap-check">✓</span><span>Polimorfismo</span></li>
+      </ul>
+    </section>
+
+    <!-- 21 · CLOSING -->
+    <section class="slide slide--closing" data-label="Cierre">
+      <p class="eyebrow">Gracias</p>
+      <h2>¿Preguntas?</h2>
+      <p class="sub">Con estas cinco ideas ya puedes leer y escribir la gran mayoría del código orientado a objetos que te vas a encontrar en Python.</p>
+      <p class="footnote">Fundamentos de POO — material transversal</p>
+    </section>
+
+  </div>
+
+  <div class="chrome-bottom" id="dots"></div>
+</div>
+
+<script>
+  (function () {
+    var deck = document.getElementById('deck');
+    var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+    var dotsEl = document.getElementById('dots');
+    var counterEl = document.getElementById('counter');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var current = 0;
+
+    slides.forEach(function (slide, i) {
+      var dot = document.createElement('button');
+      dot.className = 'dot';
+      dot.setAttribute('aria-label', (i + 1) + '. ' + (slide.dataset.label || 'Slide'));
+      dot.addEventListener('click', function () { go(i); });
+      dotsEl.appendChild(dot);
+    });
+
+    function render() {
+      var appEl = document.querySelector('.app');
+      var slideWidth = appEl.clientWidth;
+      deck.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
+      counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+        dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+      });
+      prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+      nextBtn.style.visibility = current === slides.length - 1 ? 'hidden' : 'visible';
+    }
+
+    function go(i) {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      render();
+    }
+
+    prevBtn.addEventListener('click', function () { go(current - 1); });
+    nextBtn.addEventListener('click', function () { go(current + 1); });
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(current + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(current - 1); }
+      else if (e.key === 'Home') { go(0); }
+      else if (e.key === 'End') { go(slides.length - 1); }
+    });
+
+    window.addEventListener('resize', render);
+
+    render();
+  })();
+</script>
