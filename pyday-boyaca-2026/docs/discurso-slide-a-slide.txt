@@ -1,0 +1,309 @@
+DISCURSO IMAGINADO — SLIDE A SLIDE
+"Más allá del notebook" · PyDay Boyacá 2026
+(borrador de diagnóstico: qué tan orgánico suena en voz alta, no un guion final)
+
+v2 — actualizado tras el reorden de la Etapa 3 (data/ y notebooks/ antes de src/,
+más la slide puente "lo que no cambia"). 44 slides en total.
+
+Notación: [S1] = slide 1 según el orden real del deck. Entre corchetes,
+acotaciones de escena — no se dicen en voz alta.
+
+────────────────────────────────────────
+
+[S1 · Portada]
+Buenas tardes a todos. Mi nombre es Juanfe Martínez, y esta charla se llama "Más allá
+del notebook". [pausa, dejar que se lea el título] Antes de empezar les voy a contar
+una historia — no una charla sobre herramientas, sino sobre las decisiones que uno
+termina tomando cuando un proyecto de datos crece.
+
+[S2 · Streamly es una plataforma de streaming]
+Imaginemos una empresa. Se llama Streamly, es una plataforma de streaming — no
+existe, me la inventé para esta charla, pero el problema que vamos a ver sí existe,
+y probablemente varios de ustedes ya lo vivieron con otro nombre. Streamly tiene
+miles de usuarios, cobra una suscripción mensual, y tiene un problema que tarde o
+temprano le llega a cualquier equipo de datos.
+
+[S3 · Streamly necesita saber quién va a cancelar]
+El problema es este: Streamly necesita saber quién va a cancelar. A ustedes les
+llega la tarea así, tal cual: sacan cien mil filas de la base de datos, las exportan
+a un CSV, abren un notebook, lo llaman `churn_prediction.ipynb`... y empiezan.
+
+[S4 · Etapa 1 — El notebook]
+Y esto es exactamente lo que hacen. [click, aparece el notebook celda por celda]
+Importan pandas y scikit-learn. Cargan el CSV. Limpian un par de columnas con
+valores nulos. Calculan una variable nueva, `engagement_score`. Separan train y
+test. Entrenan una regresión logística. Y miden: 0.762 de ROC-AUC. [pausa]
+Quince celdas, cada una hace una cosa, se lee de arriba a abajo. Y quiero ser
+enfático en algo: esto no tiene nada de malo. Así debería empezar cualquier
+proyecto de machine learning.
+
+[S5 · Cargas los datos, limpias, entrenas... funciona.]
+Cargan los datos, limpian, entrenan una regresión logística. Funciona. Cierran la
+laptop satisfechos. [pausa corta] Una semana después, alguien del equipo escribe en
+el chat: "oye, ¿probamos con Random Forest?" [pausa, mirar al público] Ese —
+justo ese mensaje — es el momento exacto en el que el notebook deja de alcanzar.
+Y ni siquiera se dan cuenta todavía.
+
+[S6 · Etapa 2 — Copiar, pegar, cambiar una línea]
+Entonces hacen lo más razonable: copian la celda del modelo, la pegan debajo, y
+cambian una línea. Regresión logística: 0.762. Random Forest: 0.764. XGBoost:
+0.772. [click, click, click] Tres modelos, tres resultados, y una carpeta que ya
+empieza a tener demasiado scroll.
+
+[S7 · ¿Dónde ponemos el código que comparten?]
+Y aquí aparece la primera pregunta incómoda de la charla. Miren estas tres celdas
+[gesto hacia atrás] — el `.fit()` es el mismo, el cálculo de la métrica es el
+mismo, lo único que cambia es el nombre de la clase. Entonces alguien pregunta,
+en voz baja, casi para sí mismo: ¿dónde ponemos el código que todos estos modelos
+comparten? [pausa] Guardo esa pregunta. Se las voy a devolver más adelante.
+
+[S8 · Ahora hay que calcular algo que no estaba en los datos]
+Mientras tanto, alguien del equipo tiene una idea: hay una variable que no está en
+el dataset original, pero que si la calculan, el modelo va a mejorar. Una variable
+nueva. Y ahí — con una variable nueva, nada más — un notebook tradicional empieza
+a salirse de control. Vamos a verlo en tiempo real.
+
+[S9 · RERUN — por una variable nueva]
+[click — el notebook se vuelve a ejecutar desde el principio, más rápido esta vez]
+Import, carga, limpieza — esas tres no cambiaron, así que las dejo pasar rápido.
+Pero miren la celda 4: ahora calculamos `payment_risk`, a partir de los pagos
+fallidos y el precio mensual. Y para que esa columna nueva llegue al modelo, hay
+que volver a correr todo lo de abajo: el split, el entrenamiento, la métrica.
+0.771. [pausa] Toda la libreta, otra vez, por una sola columna nueva.
+
+[S10 · Y no se detienen en una sola variable]
+Y no se detienen ahí. Alguien más se da cuenta de que combinando columnas se puede
+describir mejor a un cliente de Streamly. Y empiezan a aparecer más ideas.
+
+[S11 · Combinando columnas de Streamly]
+Cuatro, para ser exactos: `engagement_score`, que ya vimos. `payment_risk`, que
+también. `customer_activity`, combinando cuántos dispositivos usa un cliente con
+cuánto contenido distinto consume. Y `support_intensity`, tickets de soporte más
+quejas. [pausa] Cada vez que se agrega una de estas, hay que volver a correr las
+quince celdas para los cuatro modelos. Y sí — otra vez.
+
+[S12 · RERUN — por un nuevo cálculo de variables]
+[click, se repite el mismo baile, aún más rápido] Import, carga, limpieza, sin
+cambios. Celda 4: ahora `customer_activity` y `support_intensity` juntas. Y de
+nuevo, split, entrenamiento, métrica. 0.772. ¿Notan el patrón? Cada vez que
+alguien tiene una idea, el costo de probarla es correr todo el notebook de
+nuevo.
+
+[S13 · Hay varias formas de resolver esto — casi todas sucias]
+Entonces el equipo empieza a buscar salidas. Y hay, básicamente, tres: sobrescribir
+las celdas del mismo notebook cada vez que cambian algo. Copiar y pegar el código
+de cada experimento debajo del anterior. O crear un notebook nuevo por cada
+experimento. [pausa] Casi todas sucias. Vamos por partes.
+
+[S14 · Sobrescribir es la peor de las tres]
+Sobrescribir es la peor de las tres. En ciencia de datos está permitido cometer
+errores — es parte del oficio. Lo que es imperdonable es no documentarlos. Si
+sobrescriben la celda que tenía el resultado bueno, no solo pierden ese resultado:
+pierden la traza de cómo llegaron a él. Y eso, tarde o temprano, los obliga a
+repetir trabajo que ya habían hecho.
+
+[S15 · Copiar y pegar tampoco escala]
+Copiar y pegar parece más seguro, porque no borra nada. Pero el notebook se vuelve
+gigantesco. Y si en algún momento el kernel se cae — y se va a caer — reejecutarlo
+todo, con quince celdas multiplicadas por cada experimento que pegaron, sale
+carísimo.
+
+[S16 · churn_prediction_final_v3_de_verdad.ipynb]
+Así que queda la tercera opción: un notebook nuevo por experimento. Y esto es lo
+que termina pasando. [click, aparece la lista de archivos] `churn_prediction.ipynb`.
+`churn_prediction_final.ipynb`. `churn_prediction_final_v2.ipynb`.
+`churn_prediction_final_v3_de_verdad.ipynb`. [pausa, dejar que se rían] Y aquí
+va el problema real: nadie recuerda cuál de los cuatro tiene el
+`engagement_score` corregido.
+
+[S17 · Aquí nace la primera decisión de arquitectura real]
+Y aquí — justo aquí, no antes — nace la primera decisión de arquitectura real de
+todo este proyecto. No la tomaron por seguir una buena práctica que leyeron en un
+blog. La tomaron porque ya no aguantaban perder la cuenta. La decisión es: sacar
+el código del notebook.
+
+[S18 · Lo que no es código, se queda donde estaba] [SLIDE NUEVA — puente]
+Pero antes de mostrarles a dónde se muda el código, quiero que quede claro qué NO
+se mueve. El dataset sigue siendo un dataset — vive en disco, no en una celda. Y
+los notebooks de exploración siguen siendo notebooks — solo que dejan de ser el
+lugar donde se entrena el modelo de verdad. Miremos las dos, rápido, antes de
+llegar a la parte que sí cambió.
+
+[S19 · streamly-churn/data/]
+Esto es `data/`. [click, aparece el árbol] Adentro, dos carpetas: `processed`, con
+el CSV ya limpio y con las features calculadas; y `raw`, con el CSV tal como llega
+de la base de datos, más un diccionario de columnas para que nadie tenga que
+adivinar qué significa `days_since_last_login`. Nada de esto es código — son solo
+archivos, separados por su nivel de procesamiento.
+
+[S20 · streamly-churn/notebooks/]
+Y esto es `notebooks/`. [click] `exploracion.ipynb`, `comparacion_modelos.ipynb`,
+`feature_ideas.ipynb` — el notebook no desaparece, se muda aquí. Puede seguir
+siendo desordenado, porque es para explorar. Lo único que cambia es que ninguno
+de estos es ya el pipeline de producción.
+
+[S21 · ¿Cómo se organiza ese código?]
+Bien — datos, aparte. Notebooks de exploración, aparte. Ahora sí, la pregunta que
+realmente nos trajo hasta acá: el código que decidimos sacar del notebook,
+¿cómo se organiza? La respuesta que vamos a usar hoy es la más simple que existe:
+por responsabilidad. Cada carpeta hace una sola cosa.
+
+[S22 · streamly-churn/src/]
+Así queda. [click, aparece el árbol] `data`, y ojo, no es la misma `data/` que
+acabamos de ver — esta vive dentro de `src/`, y en vez de archivos tiene un
+`loader.py`: el código que carga y limpia el CSV, no el CSV en sí. `evaluation`,
+con las métricas. `features`, con las cuatro variables que ya vimos. `models`,
+con una función de entrenamiento por modelo. Y `utils`. Cinco responsabilidades,
+cinco carpetas. El notebook deja de ser el lugar donde vive el código. Pasa a ser
+el lugar donde se usa el código.
+
+[S23 · train.py]
+El punto de entrada real es este archivo: `train.py`. [click, aparece el código]
+Importa el loader de datos, las features, los modelos, la evaluación — junta
+todas las piezas de `src/` en un solo lugar que se ejecuta de principio a fin.
+Y miren, esta es la respuesta a la pregunta que dejé pendiente hace un rato:
+¿dónde ponemos el código que comparten los tres modelos? Aquí. En un solo lugar,
+una sola vez.
+
+[S24 · Esto resuelve dónde vive el código]
+Pero seamos honestos: esto resuelve dónde vive el código. Todavía no resuelve
+cómo probamos distintas combinaciones sin duplicar nada, ni cómo hacemos que todo
+esto sea reproducible. Esos dos problemas siguen ahí, esperando.
+
+[S25 · streamly-churn/tests/]
+Antes de seguir, un detalle chiquito pero importante: `tests/`. Una prueba por
+módulo. El código de `src/` ya no depende de que "funcionó en mi notebook" —
+depende de que la prueba pase.
+
+[S26 · Ahora que el código vive en src/, probar variantes es más fácil]
+Ahora que el código vive en `src/` y no en un notebook, probar variantes debería
+ser más fácil. Y el equipo empieza a preguntarse algo distinto: de todas las
+combinaciones posibles de features, modelo e hiperparámetros, ¿cuál funciona
+mejor?
+
+[S27 · ¿Qué combinación funciona mejor?]
+Y aparecen preguntas concretas: ¿con `engagement_score` o sin él? ¿XGBoost con
+`max_depth` de 4 o de 8? ¿Con `payment_risk` o sin `payment_risk`? Son preguntas
+razonables. El problema es cómo las contestamos sin volver al caos de hace un
+rato.
+
+[S28 · ¿Vas a duplicar train.py por cada combinación?]
+Porque la primera tentación es esta: editar `train.py` a mano cada vez, o
+duplicarlo por variante. Y ustedes ya saben, porque ya lo vivimos, que eso
+tampoco escala. Tiene que haber otra forma.
+
+[S29 · configs/experimento_01.yaml]
+Y la hay. En vez de tocar el código para cada combinación, describimos el
+experimento en un archivo aparte. [click, aparece el yaml] Modelo: xgboost.
+Features: estas tres. Hiperparámetros: estos. `train.py` no cambia nunca — lo
+que cambia es qué configuración le pasan. Ya no estamos entrenando un modelo.
+Estamos gestionando experimentos.
+
+[S30 · configs/]
+Y como cada combinación es un archivo nuevo, nada se sobreescribe. Un yaml por
+experimento, uno al lado del otro.
+
+[S31 · "¿Cómo obtuviste ese 0.91 de ROC-AUC?"]
+Con esto ya pueden probar decenas de combinaciones sin duplicar código. Pero un
+día, en el standup, alguien pregunta: "oye, ¿cómo obtuviste ese 0.91 de ROC-AUC?"
+[pausa larga, dejar el silencio incómodo] Y nadie contesta.
+
+[S32 · Ahí empieza el terror]
+Porque en ese silencio se dan cuenta de que ya no saben: qué versión del CSV se
+usó, qué features estaban activas ese día, qué modelo y qué hiperparámetros, qué
+`random_state`, qué preprocesamiento tenía el notebook en ese momento exacto.
+Cinco preguntas, cero respuestas.
+
+[S33 · La solución no es acordarse mejor]
+Y la solución no es acordarse mejor — nadie se va a acordar mejor, eso ya
+quedó claro. La solución es dejar de depender de la memoria: que cada
+experimento quede registrado por sí solo, con su configuración, su seed y un
+identificador único. Una herramienta como MLflow complementa ese registro. No
+lo reemplaza — el yaml sigue siendo la fuente de verdad de qué se configuró.
+
+[S34 · MLflow lo hace por ti]
+Y en la práctica se ve así. [click, aparece el código] Abren una corrida,
+registran los parámetros del config, registran la métrica, registran el modelo
+entrenado como artefacto. Tres líneas, y esa corrida ya no depende de que
+alguien se acuerde de nada.
+
+[S35 · MLflow ya tiene la respuesta a las 5 preguntas de antes]
+Y con esto, MLflow ya tiene la respuesta a las cinco preguntas de hace un
+momento: versión del dataset, features activas, modelo e hiperparámetros,
+random_state, preprocesamiento. Todo registrado, en cada corrida, sin que nadie
+tenga que acordarse.
+
+[S36 · Y puedes comparar todas las corridas, una junto a la otra]
+Y lo mejor: pueden comparar todas las corridas, una junto a la otra.
+`run_2026-08-01`, regresión logística, 0.762. `run_2026-08-03`, random forest,
+0.764. `run_2026-08-05`, XGBoost... 0.91. [pausa, señalar] Ahí está. Así fue
+como se obtuvo ese 0.91 del principio de la etapa.
+
+[S37 · experiments/]
+Y cada una de esas corridas queda en disco, con su configuración, sus métricas y
+su modelo — no en la cabeza de nadie, en una carpeta.
+
+[S38 · Después de seis fricciones reales, esto es lo que queda]
+Después de seis fricciones reales — y quiero que noten que dije fricciones,
+no decisiones de diseño de un arquitecto en una pizarra — esto es lo que
+queda.
+
+[S39 · streamly-churn/]
+[click, aparece el árbol completo, dejar que respire unos segundos sin hablar]
+`configs`, `data`, `experiments`, `notebooks`, `src` — ya organizado por dentro,
+como acabamos de ver — y `tests`, y en la raíz, `train.py` y `predict.py`. Miren
+cuánto camino hay entre esto y el CSV que abrimos al principio de la charla.
+
+[S40 · predict.py]
+Y esta es la otra mitad del proyecto que casi nunca se cuenta: una vez que
+entrenan, alguien tiene que usar el modelo. `predict.py` carga justo la corrida
+ganadora — `run_2026-08-05_e91b`, la del 0.91 — sin que nadie tenga que
+acordarse cuál era. Esa es, literalmente, la razón por la que registramos todo
+en la etapa anterior.
+
+[S41 · El verdadero protagonista no es ninguna herramienta]
+Y quiero cerrar con esto: el verdadero protagonista de todo lo que acaban de ver
+no es ninguna herramienta. No es XGBoost, no es MLflow, no es esta estructura de
+carpetas en particular. Son las decisiones que nos llevaron a necesitarlas — y
+ninguna de esas decisiones se tomó de un tirón.
+
+[S42 · Tu notebook no falló]
+Así que si en su computador tienen ahora mismo una carpeta con un archivo que
+termina en "_final_v2_de_verdad", quiero que se lleven esto: su notebook no
+falló. Es la primera señal de que su proyecto está listo para evolucionar.
+
+[S43 · Contacto]
+Ahí les dejo mi correo por si quieren seguir la conversación, mostrar en qué
+andan, o decirme en qué estuve mal.
+
+[S44 · ¡Gracias!]
+Muchas gracias por acompañarme esta tarde.
+
+────────────────────────────────────────
+
+NOTAS PARA EL DIAGNÓSTICO (no son parte del discurso):
+
+- El tramo S9→S12 (los dos reruns) sigue siendo el más repetitivo leído en voz
+  alta: casi el mismo párrafo dos veces. Se sostiene porque hay una animación
+  detrás, pero conviene que la segunda pasada suene más impaciente/rápida, no
+  igual que la primera.
+- S18 (la slide puente nueva) es la que sostiene todo el tramo S18→S21: le dice
+  al público, antes de ver dos árboles seguidos (data/, notebooks/), que esos
+  dos NO son la parte interesante — así S19 y S20 se sienten como un trámite
+  rápido y no como un desvío sin explicación. Si se corta esa frase puente, el
+  problema que señalaste vuelve.
+- S22 ahora incluye una aclaración explícita ("ojo, no es la misma data/ que
+  acabamos de ver") — es la única línea de todo el discurso que existe
+  puramente para resolver una posible confusión de la audiencia, no para
+  avanzar la historia. Vale la pena decirla con calma, no de pasada.
+- S28 depende de que el público recuerde el callback al notebook duplicado de
+  la Etapa 3 (S16, ahora más lejos en la cuenta que antes). Si pasaron más de
+  diez minutos, vale un gesto o palabra que lo ancle ("otra vez la misma
+  pregunta, ahora con train.py").
+- S31 planta el "0.91" como misterio y S36 lo resuelve — sigue siendo el mejor
+  gancho de todo el discurso; la distancia entre plantear y resolver no cambió
+  con el reorden.
+- S40 (predict.py) es nueva desde la última ronda: cierra el arco de MLflow con
+  una acción concreta (usar el modelo ganador), en vez de dejar el 0.91 como un
+  dato suelto. Vale la pena no apurarla — es el único momento donde "todo lo
+  que construimos" se usa para algo, no solo se organiza.
