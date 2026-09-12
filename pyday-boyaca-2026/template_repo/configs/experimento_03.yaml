@@ -1,0 +1,8 @@
+model: random_forest
+features:
+  - engagement_score
+  - payment_risk
+  - customer_activity
+  - support_intensity
+hyperparameters:
+  n_estimators: 300

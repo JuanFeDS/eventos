@@ -1,0 +1,6 @@
+model: random_forest
+features:
+  - engagement_score
+  - payment_risk
+hyperparameters:
+  n_estimators: 300
