@@ -1,0 +1,8 @@
+model: xgboost
+features:
+  - engagement_score
+  - payment_risk
+hyperparameters:
+  max_depth: 4
+  learning_rate: 0.05
+  n_estimators: 300
